@@ -1,0 +1,12 @@
+<resources>
+
+	<spritesheet>
+		<imagesrc>spritesheet.gif</imagesrc>
+		<framesrc>spritesheet.xml</framesrc>
+	</spritesheet>
+
+	<image>
+		<src>jig-splash.png</src>
+	</image>
+	
+</resources>

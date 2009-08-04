@@ -106,14 +106,12 @@ public class Board {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-//		sb.append("  a b c d e f g h \n");
 		sb.append("  0 1 2 3 4 5 6 7 \n");
 
 		for (int x = 0; x < WIDTH; x++) {
-//			sb.append((x + 1) + " ");
 			sb.append((x) + " ");
 			for (State s : board[x]) {
-				char c = '.';
+				char c;
 				switch (s) {
 					case LIGHT:
 						c = 'O';
@@ -121,6 +119,8 @@ public class Board {
 					case DARK:
 						c = 'X';
 						break;
+					default:
+						c = '.';
 				}
 				sb.append(c + " ");
 			}

@@ -1,0 +1,28 @@
+<spriteset>
+    <author>Andrew Blaine</author>
+    <name>sprites</name>
+    <type>image/gif</type>
+    <width>240</width>
+    <height>160</height>
+
+    <frameset>
+        <name>othello-piece</name>
+        <top>0</top>
+        <left>0</left>
+        <width>80</width>
+        <height>80</height>
+        <rows>1</rows>
+        <columns>5</columns>
+    </frameset>
+    
+    <frameset>
+    	<name>piece-placeholder</name>
+    	<top>80</top>
+    	<left>0</left>
+    	<width>80</width>
+        <height>80</height>
+        <rows>1</rows>
+        <columns>2</columns>
+    </frameset>
+
+</spriteset>
