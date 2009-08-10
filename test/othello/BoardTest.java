@@ -44,7 +44,7 @@ public class BoardTest {
 	@Test
 	public void testMakeMove() {
 		System.out.println("makeMove");
-		PlayerMove playerMove = new PlayerMove(new Point(2, 3), State.DARK);
+		Piece playerMove = new Piece(new Point(2, 3), State.DARK);
 		Board instance = new Board();
 		instance.makeMove(playerMove);
 		State[][] s = new State[8][8];
@@ -62,7 +62,7 @@ public class BoardTest {
 		Board expResult = new Board(s);
 		assertArrayEquals(new Board(s).toString() +
 							"==================\n" +
-							instance.toString(), expResult.getBoard(), instance.getBoard());
+							instance.toString(), expResult.clone(), instance.clone());
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class BoardTest {
 		expResult[4][3] = State.DARK;
 
 		Board instance = new Board();
-		State[][] result = instance.getBoard();
+		State[][] result = instance.clone();
 		
 		assertArrayEquals(expResult, result);
 	}

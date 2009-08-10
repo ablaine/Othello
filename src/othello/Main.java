@@ -1,5 +1,6 @@
 package othello;
 
+import java.awt.Point;
 import jig.engine.RenderingContext;
 import jig.engine.ResourceFactory;
 import jig.engine.hli.StaticScreenGame;
@@ -30,16 +31,17 @@ public class Main extends StaticScreenGame {
 
 		gameObjectLayers.add(tileLayer);
 
-		BoardDisplay boardDisplay = new BoardDisplay(tileLayer);
+		Board b = new Board();
+		BoardDisplay boardDisplay = new BoardDisplay(b, tileLayer);
 		view = new View(boardDisplay);
 
-
+//		b.makeMove(new Piece(new Point(2,3), State.DARK));
 //		Board b = new Board();
 //
 //		System.out.println("Here is the board:");
 //		System.out.println(b.toString());
 ////		b.makeMove(new PlayerMove(new Point(2, 3), State.LIGHT));
-//		b.makeMove(new PlayerMove(new Point(2, 3), State.DARK));
+//		b.makeMove(new Piece(new Point(2, 3), State.DARK));
 //		System.out.println("Here is the new board:");
 //		System.out.println(b.toString());
 	}
