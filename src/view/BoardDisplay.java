@@ -1,14 +1,12 @@
 package view;
 
 import java.awt.Point;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.physics.vpe.VanillaAARectangle;
 import othello.Board;
-import othello.State;
-import util.Pair;
+import othello.FlipList;
 
 /**
  *
@@ -30,12 +28,11 @@ public class BoardDisplay implements Observer {
 	}
 
 	public void update(Observable o, Object arg) {
-		Pair<List<Point>, State> listToFlip = (Pair<List<Point>, State>) arg;
-		List<Point> lst = listToFlip.getFirst();
+		FlipList listToFlip = (FlipList) arg;
 
-		for (Point p : lst) {
+		for (Point p : listToFlip) {
 			Point loc = p.getLocation();
-			board[loc.x][loc.y].setState(listToFlip.getSecond());
+			board[loc.x][loc.y].setState(listToFlip.getState());
 		}
 	}
 }

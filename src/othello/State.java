@@ -9,7 +9,7 @@ import java.util.Random;
 public enum State {
 	EMPTY, LIGHT, DARK;
 
-	private static Random random = new Random();
+	private final static Random random = new Random();
 
 	public State getOpposite() {
 		switch(this) {
@@ -19,7 +19,7 @@ public enum State {
 		}
 	}
 
-	public State getRandom() {
+	public static State getRandom() {
 		if (random.nextInt(2) == 0) {
 			return DARK;
 		} else {

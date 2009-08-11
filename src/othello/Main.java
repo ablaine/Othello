@@ -6,6 +6,8 @@ import jig.engine.ResourceFactory;
 import jig.engine.hli.StaticScreenGame;
 import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.physics.vpe.VanillaAARectangle;
+import player.Player;
+import util.StateManager;
 import view.BoardDisplay;
 import view.View;
 
@@ -15,12 +17,16 @@ import view.View;
  */
 public class Main extends StaticScreenGame {
 
+	private enum GameState { INIT, PLAYING, GAMEOVER }
+	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
+
 	public static final String RSC_PATH = "resources/";
 	public static final String SPRITE_SHEET = RSC_PATH + "spritesheet.gif";
 
 	private AbstractBodyLayer<VanillaAARectangle> tileLayer;
 
 	private View view;
+	private Match match;
 
 	public Main() {
 		super(View.WORLD_WIDTH, View.WORLD_HEIGHT, false);
@@ -35,7 +41,9 @@ public class Main extends StaticScreenGame {
 		BoardDisplay boardDisplay = new BoardDisplay(b, tileLayer);
 		view = new View(boardDisplay);
 
-//		b.makeMove(new Piece(new Point(2,3), State.DARK));
+		Player dark = new Player("RandomPlayer");
+		Player light = new Player("RandomPlayer");
+		match = new Match(b, dark, light);
 //		Board b = new Board();
 //
 //		System.out.println("Here is the board:");
@@ -46,10 +54,21 @@ public class Main extends StaticScreenGame {
 //		System.out.println(b.toString());
 	}
 
+	@Override
 	public void update(final long deltaMs) {
 		super.update(deltaMs);
+		switch(stateManager.getCurState()) {
+			case INIT:
+				match.update(deltaMs);
+				break;
+			case PLAYING:
+				break;
+			case GAMEOVER:
+				break;
+		}
 	}
 
+	@Override
 	public void render(final RenderingContext rc) {
 		super.render(rc);
 	}

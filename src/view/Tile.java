@@ -4,12 +4,13 @@ import jig.engine.physics.vpe.VanillaAARectangle;
 import jig.engine.util.Vector2D;
 import othello.Main;
 import othello.State;
+import othello.IState;
 
 /**
  *
  * @author ablaine
  */
-public class Tile extends VanillaAARectangle {
+public class Tile extends VanillaAARectangle implements IState {
 	private enum Frame {
 		LIGHT(0), DARK(1), LIGHT_TRANS(2), DARK_TRANS(3), EMPTY(4);
 
@@ -23,8 +24,8 @@ public class Tile extends VanillaAARectangle {
 			return value;
 		}
 	}
-	private int x;
-	private int y;
+	private final int x;
+	private final int y;
 	private State state;
 
 	public Tile (int x, int y, State s) {
