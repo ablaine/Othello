@@ -45,11 +45,10 @@ public class Main extends StaticScreenGame {
 		int seconds = 10;
 
 		Alarm alarm = theClock.setAlarm(1000000000L * seconds);
-		Timer t = new Timer(alarm);
 		Player dark = new Player("RandomPlayer");
 		Player light = new Player("RandomPlayer");
-		GameLogic._init(t);
-		match = new Match(t, board, dark, light);
+		GameLogic._init(alarm);
+		match = new Match(alarm, board, dark, light);
 //		Board b = new Board();
 //
 //		System.out.println("Here is the board:");

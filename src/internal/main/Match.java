@@ -17,14 +17,14 @@ public class Match {
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 
 	private final Board board;
-	private Timer alarm;
+	private Alarm alarm;
 	private final Player dark;
 	private final Player light;
 	private Player curPlayer;
 	private AIThread aiThread;
 	private State winner = null;
 
-	public Match(Timer alarm, Board board, Player dark, Player light) {
+	public Match(Alarm alarm, Board board, Player dark, Player light) {
 		this.alarm = alarm;
 		this.board = board;
 		this.dark = dark;

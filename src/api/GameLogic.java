@@ -4,7 +4,6 @@ import api.struct.Board;
 import api.struct.Move;
 import api.struct.FlipList;
 import api.struct.MoveList;
-import internal.main.Timer;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,9 +17,9 @@ import jig.engine.GameClock.Alarm;
  * @author ablaine
  */
 public class GameLogic {
-	private static Timer alarm;
+	private static Alarm alarm;
 
-	public static void _init(Timer alarm) {
+	public static void _init(Alarm alarm) {
 		if (GameLogic.alarm == null) {
 			GameLogic.alarm = alarm;
 		}
