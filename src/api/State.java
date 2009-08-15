@@ -1,4 +1,4 @@
-package othello;
+package api;
 
 import java.util.Random;
 

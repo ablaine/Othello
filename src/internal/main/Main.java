@@ -1,15 +1,17 @@
-package othello;
+package internal.main;
 
-import java.awt.Point;
+import api.GameLogic;
 import jig.engine.RenderingContext;
 import jig.engine.ResourceFactory;
 import jig.engine.hli.StaticScreenGame;
 import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.physics.vpe.VanillaAARectangle;
-import player.Player;
-import util.StateManager;
-import view.BoardDisplay;
-import view.View;
+
+import internal.util.StateManager;
+import internal.view.BoardDisplay;
+import internal.view.View;
+import api.struct.Board;
+import jig.engine.GameClock.Alarm;
 
 /**
  *
@@ -20,7 +22,7 @@ public class Main extends StaticScreenGame {
 	private enum GameState { INIT, PLAYING, GAMEOVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 
-	public static final String RSC_PATH = "resources/";
+	public static final String RSC_PATH = "internal/resources/";
 	public static final String SPRITE_SHEET = RSC_PATH + "spritesheet.gif";
 
 	private AbstractBodyLayer<VanillaAARectangle> tileLayer;
@@ -37,13 +39,17 @@ public class Main extends StaticScreenGame {
 
 		gameObjectLayers.add(tileLayer);
 
-		Board b = new Board();
-		BoardDisplay boardDisplay = new BoardDisplay(b, tileLayer);
+		Board board = BoardFactory.createDefaultOthelloBoard();
+		BoardDisplay boardDisplay = new BoardDisplay(board, tileLayer);
 		view = new View(boardDisplay);
+		int seconds = 10;
 
+		Alarm alarm = theClock.setAlarm(1000000000L * seconds);
+		Timer t = new Timer(alarm);
 		Player dark = new Player("RandomPlayer");
 		Player light = new Player("RandomPlayer");
-		match = new Match(b, dark, light);
+		GameLogic._init(t);
+		match = new Match(t, board, dark, light);
 //		Board b = new Board();
 //
 //		System.out.println("Here is the board:");

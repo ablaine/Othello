@@ -1,4 +1,4 @@
-package util;
+package internal.util;
 
 /**
  * Manages state information for a class by providing setters/getters and

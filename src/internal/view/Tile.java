@@ -1,16 +1,15 @@
-package view;
+package internal.view;
 
 import jig.engine.physics.vpe.VanillaAARectangle;
 import jig.engine.util.Vector2D;
-import othello.Main;
-import othello.State;
-import othello.IState;
+import internal.main.Main;
+import api.State;
 
 /**
  *
  * @author ablaine
  */
-public class Tile extends VanillaAARectangle implements IState {
+public class Tile extends VanillaAARectangle {
 	private enum Frame {
 		LIGHT(0), DARK(1), LIGHT_TRANS(2), DARK_TRANS(3), EMPTY(4);
 

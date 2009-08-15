@@ -1,4 +1,4 @@
-package othello;
+package api.struct;
 
 import java.awt.Point;
 import java.util.LinkedList;
@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author ablaine
  */
-public class MoveList extends LinkedList<Move> {
+public final class MoveList extends LinkedList<Move> {
 
 	public List<Point> toPoints() {
 		List<Point> result = new LinkedList<Point>();

@@ -1,4 +1,7 @@
-package player;
+package internal.main;
+
+import api.PlayerLogic;
+import api.State;
 
 /**
  *
@@ -8,11 +11,13 @@ public class PlayerLogicFactory {
 	private static final String AI_PACKAGE = "implementations.ai";
 	public static final String HUMAN_PLAYER = "HumanPlayer";
 
-	public PlayerLogic createPlayerLogic(String className) {
+	public PlayerLogic createPlayerLogic(String className, Player player, State playerState) {
 		if (className.equals(HUMAN_PLAYER)) {
 			return null;//TODO
 		} else {
-			return findPlayerLogic(className);
+			PlayerLogic result = findPlayerLogic(className);
+			result._init(player, playerState);
+			return result;
 		}
 	}
 

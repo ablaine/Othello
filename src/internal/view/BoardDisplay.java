@@ -1,12 +1,12 @@
-package view;
+package internal.view;
 
 import java.awt.Point;
 import java.util.Observable;
 import java.util.Observer;
 import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.physics.vpe.VanillaAARectangle;
-import othello.Board;
-import othello.FlipList;
+import api.struct.Board;
+import api.struct.FlipList;
 
 /**
  *
@@ -16,9 +16,9 @@ public class BoardDisplay implements Observer {
 	private Tile[][] board;
 
 	public BoardDisplay(Board actualBoard, AbstractBodyLayer<VanillaAARectangle> tileLayer) {
-		board = new Tile[Board.WIDTH][Board.HEIGHT];
-		for (int x = 0; x < Board.WIDTH; x++) {
-			for (int y = 0; y < Board.HEIGHT; y++) {
+		board = new Tile[Board.SIZE][Board.SIZE];
+		for (int x = 0; x < Board.SIZE; x++) {
+			for (int y = 0; y < Board.SIZE; y++) {
 				Tile t = new Tile(x, y, actualBoard.getState(x, y));
 				board[x][y] = t;
 				tileLayer.add(t);

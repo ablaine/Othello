@@ -1,5 +1,6 @@
-package othello;
+package api.struct;
 
+import api.State;
 import java.awt.Point;
 import java.util.LinkedList;
 
@@ -7,7 +8,7 @@ import java.util.LinkedList;
  *
  * @author ablaine
  */
-public class FlipList extends LinkedList<Point> implements IState {
+public final class FlipList extends LinkedList<Point> {
 	private final State state;
 
 	public FlipList(State state) {
