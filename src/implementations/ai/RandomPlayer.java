@@ -3,6 +3,7 @@ package implementations.ai;
 import api.GameLogic;
 import api.struct.Board;
 import api.PlayerLogic;
+import internal.util.UnitConversion;
 import java.awt.Point;
 import java.util.List;
 import java.util.Random;
@@ -17,11 +18,11 @@ public class RandomPlayer extends PlayerLogic {
 
 	@Override
 	public Point makeMove(Board board, List<Point> validMoves) {
-		System.out.println("FIRST: " + (long)GameLogic.getRemainingTime() + " in seconds (" + ((long)GameLogic.getRemainingTime()/1000000000L) + ")");
+		System.out.println("FIRST: " + (long)GameLogic.getRemainingTime() + " (" + UnitConversion.nanosecondToSecond((long)GameLogic.getRemainingTime()) + "s)");
 		for (long i = 0; i < 1000000000L; i++) {
 			test = i + i * i;
 		}
-		System.out.println("SECND: " + (long)GameLogic.getRemainingTime() + " in seconds (" + ((long)GameLogic.getRemainingTime()/1000000000L) + ")");
+		System.out.println("SECND: " + (long)GameLogic.getRemainingTime() + " (" + UnitConversion.nanosecondToSecond((long)GameLogic.getRemainingTime()) + "s)");
 		if (test == 0 ) {
 			System.out.println("WOAH");
 		}

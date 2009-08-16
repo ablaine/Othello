@@ -11,6 +11,7 @@ import internal.util.StateManager;
 import internal.view.BoardDisplay;
 import internal.view.View;
 import api.struct.Board;
+import internal.util.UnitConversion;
 import jig.engine.GameClock.Alarm;
 
 /**
@@ -44,19 +45,11 @@ public class Main extends StaticScreenGame {
 		view = new View(boardDisplay);
 		int seconds = 10;
 
-		Alarm alarm = theClock.setAlarm(1000000000L * seconds);
+		Alarm alarm = theClock.setAlarm(UnitConversion.secondToNanosecond(seconds));
 		Player dark = new Player("RandomPlayer");
 		Player light = new Player("RandomPlayer");
 		GameLogic._init(alarm);
 		match = new Match(alarm, board, dark, light);
-//		Board b = new Board();
-//
-//		System.out.println("Here is the board:");
-//		System.out.println(b.toString());
-////		b.makeMove(new PlayerMove(new Point(2, 3), State.LIGHT));
-//		b.makeMove(new Piece(new Point(2, 3), State.DARK));
-//		System.out.println("Here is the new board:");
-//		System.out.println(b.toString());
 	}
 
 	@Override

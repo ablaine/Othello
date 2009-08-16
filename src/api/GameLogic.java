@@ -53,13 +53,14 @@ public class GameLogic {
 
 	// These two seem out of place since they are just always for the current
 	// player. Hmm..
+	/**
+	 * Returns the current player's remaining time to make a move. Result is
+	 * in nanoseconds.
+	 * @return
+	 */
 	public static long getRemainingTime() {
 		return alarm.remainingTime();
 	}
-
-//	public static boolean isOutOfTime() {
-//		return alarm.expired();
-//	}
 }
 
 class Helper {
