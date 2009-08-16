@@ -43,11 +43,11 @@ public class Main extends StaticScreenGame {
 		Board board = BoardFactory.createDefaultOthelloBoard();
 		BoardDisplay boardDisplay = new BoardDisplay(board, tileLayer);
 		view = new View(boardDisplay);
-		int seconds = 10;
+		int seconds = 3;
 
 		Alarm alarm = theClock.setAlarm(UnitConversion.secondToNanosecond(seconds));
 		Player dark = new Player("RandomPlayer");
-		Player light = new Player("RandomPlayer");
+		Player light = new Player("SlowRandomPlayer");
 		GameLogic._init(alarm);
 		match = new Match(alarm, board, dark, light);
 	}
