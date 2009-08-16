@@ -61,6 +61,10 @@ public class GameLogic {
 	public static long getRemainingTime() {
 		return alarm.remainingTime();
 	}
+
+	public static long getElapsedTime() {
+		return alarm.elapsedTime();
+	}
 }
 
 class Helper {

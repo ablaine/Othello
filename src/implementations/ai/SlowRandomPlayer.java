@@ -14,11 +14,16 @@ import java.util.Random;
  */
 public class SlowRandomPlayer extends PlayerLogic {
 	private static final Random rand = new Random();
+	private static final int delay = 1;
 
 	@Override
 	public Point makeMove(Board board, List<Point> validMoves) {
 		while (GameLogic.getRemainingTime() > UnitConversion.secondToNanosecond(1)) {
-			//Do nothing
+			if (delay > 0) {
+				if (GameLogic.getElapsedTime() >= UnitConversion.secondToNanosecond(delay)) {
+					break;
+				}
+			}
 		}
 		return validMoves.get(rand.nextInt(validMoves.size()));
 	}
