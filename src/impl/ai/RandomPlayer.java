@@ -1,7 +1,7 @@
-package implementations.ai;
+package impl.ai;
 
-import api.struct.Board;
 import api.PlayerLogic;
+import api.struct.Board;
 import java.awt.Point;
 import java.util.List;
 import java.util.Random;

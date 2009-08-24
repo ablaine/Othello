@@ -24,14 +24,21 @@ public class GameLogic {
 			GameLogic.alarm = alarm;
 		}
 	}
-	
-	public static void makeMove(Board board, Move move) {
+
+	/**
+	 * Destructive board modification.
+	 * @param board
+	 * @param move
+	 * @return
+	 */
+	public static Board makeMove(Board board, Move move) {
 		FlipList list = new Helper(board, move).getFlipped();
 		State[][] grid = board.getGrid();
 		for (Point p : list) {
 			grid[p.x][p.y] = list.getState();
 		}
 		board.notifyObservers(list);
+		return board;
 	}
 	
 	public static MoveList getValidMoves(Board board, State playerState) {

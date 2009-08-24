@@ -1,4 +1,4 @@
-package implementations.ai;
+package impl.ai;
 
 import api.GameLogic;
 import api.struct.Board;
@@ -19,6 +19,7 @@ public class SlowRandomPlayer extends PlayerLogic {
 	@Override
 	public Point makeMove(Board board, List<Point> validMoves) {
 		while (GameLogic.getRemainingTime() > UnitConversion.secondToNanosecond(1)) {
+			System.out.print("");//Wierd bug..
 			if (delay > 0) {
 				if (GameLogic.getElapsedTime() >= UnitConversion.secondToNanosecond(delay)) {
 					break;

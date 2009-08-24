@@ -1,4 +1,4 @@
-package internal.main;
+package internal;
 
 import api.State;
 import api.struct.Board;

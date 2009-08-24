@@ -1,4 +1,4 @@
-package internal.main;
+package internal;
 
 import api.GameLogic;
 import api.State;
@@ -137,6 +137,14 @@ public class Match {
 			case GAMEOVER:
 				if (stateManager.stateChange()) {
 					System.out.println("Game is over!");
+					switch (winner) {
+						case EMPTY:
+							System.out.println("It was a tie!");
+							break;
+						default:
+							System.out.println(winner.toString() + " is the winner!");
+							break;
+					}
 				}
 				break;
 		}

@@ -1,4 +1,4 @@
-package internal.main;
+package internal;
 
 import api.struct.Board;
 import api.struct.Move;

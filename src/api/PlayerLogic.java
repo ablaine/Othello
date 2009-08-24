@@ -1,7 +1,7 @@
 package api;
 
 import api.struct.Board;
-import internal.main.Player;
+import internal.Player;
 import java.awt.Point;
 import java.util.List;
 

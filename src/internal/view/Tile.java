@@ -2,7 +2,7 @@ package internal.view;
 
 import jig.engine.physics.vpe.VanillaAARectangle;
 import jig.engine.util.Vector2D;
-import internal.main.Main;
+import internal.Othello;
 import api.State;
 
 /**
@@ -28,7 +28,7 @@ public class Tile extends VanillaAARectangle {
 	private State state;
 
 	public Tile (int x, int y, State s) {
-		super(Main.SPRITE_SHEET + "#othello-piece");
+		super(Othello.SPRITE_SHEET + "#othello-piece");
 		this.x = x;
 		this.y = y;
 		setState(s);
