@@ -22,6 +22,10 @@ public class InputParser {
 		}
 	}
 
+	public String getArg(int item) {
+		return isArg(item) ? inputs.get(item) : null;
+	}
+
 	/**
 	 * Tests 
 	 */
@@ -52,8 +56,20 @@ public class InputParser {
 		this.defaultValue = defaultValue;
 	}
 
+	public boolean isValue(int index) {
+		return !isFlag(getArg(index));
+	}
+
+	private boolean isArg(int index) {
+		return index < inputs.size();
+	}
+
+	public boolean isFlag(int index) {
+		return isFlag(getArg(index));
+	}
+
 	public boolean isFlag(String flag) {
-		return flag.startsWith("-");
+		return flag != null ? flag.startsWith("-") : false;
 	}
 
 	public boolean exists(String flag) {

@@ -18,26 +18,15 @@ public class Player {
 	private int ties = 0;
 	private int losses = 0;
 
-	private final String directory;
 	private final String logicClassName;
 	private PlayerLogic logic;
 
-	public Player(String directory, String playerLogic) {
-		this.directory = directory;
+	public Player(String playerLogic) {
 		this.logicClassName = playerLogic;
 	}
 
-	public Player(String playerLogic) {
-		this(null, playerLogic);
-	}
-
 	public void init(State s) {
-		if (directory == null) {
-			logic = factory.createPlayerLogic(logicClassName, this, s);
-		} else {
-			logic = factory.createPlayerLogic(directory, logicClassName, this, s);
-		}
-		
+		logic = factory.createPlayerLogic(logicClassName, this, s);
 		logic.init();
 	}
 

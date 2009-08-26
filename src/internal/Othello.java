@@ -13,6 +13,7 @@ import internal.view.BoardDisplay;
 import internal.view.View;
 import api.struct.Board;
 import impl.ai.RandomPlayer;
+import internal.util.InputHandler;
 import internal.util.UnitConversion;
 import java.util.List;
 import jig.engine.GameClock.Alarm;
@@ -36,9 +37,7 @@ public class Othello extends StaticScreenGame {
 	private final View view;
 	private final Match match;
 
-	private static final String defaultPlayer = RandomPlayer.class.getCanonicalName().toString();
-
-	public Othello(String directory, String player1, String player2) {
+	public Othello(String player1, String player2) {
 		super(View.WORLD_WIDTH, View.WORLD_HEIGHT, false);
 		ResourceFactory.getFactory().loadResources(RSC_PATH, "resources.xml");
 		gameframe.setTitle("Othello");
@@ -53,15 +52,11 @@ public class Othello extends StaticScreenGame {
 		int seconds = 3;
 
 		Alarm alarm = theClock.setAlarm(UnitConversion.secondToNanosecond(seconds));
-		Player dark = new Player(directory, player1);
-		Player light = new Player(directory, player2);
+		Player dark = new Player(player1);
+		Player light = new Player(player2);
 
 		GameLogic._init(alarm);
 		match = new Match(alarm, board, dark, light);
-	}
-
-	public Othello() {
-		this("implementations.ai", "RandomPlayer", "RandomPlayer");
 	}
 
 	@Override
@@ -88,52 +83,11 @@ public class Othello extends StaticScreenGame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		InputParser parser = new InputParser(args);
-		if (parser.exists("help", "h")) {
-			//Print usage..
-			System.exit(0);
-		}
-		if (parser.exists("version", "v")) {
-			//Print version
-			System.out.println("Othello version 2.2");
-			System.out.println("Written by Andrew Blaine [http://ablaine.com]");
-			System.exit(0);
-		}
-
-		/* The vars to fill */
-		String dir, p1, p2;
-		dir = "";
-		p1 = p2 = defaultPlayer;
+		InputHandler handler = new InputHandler(new InputParser(args));
+		String p1 = handler.getPlayer1();
+		String p2 = handler.getPlayer2();
 		
-		/* Handle player strings: The #'s show precedence. */
-		List<String> players = parser.parsePref("players", "p");	
-/*1*/	if (players != null && players.size() >= 2) {
-			p1 = players.get(0);
-			p2 = players.get(1);
-/*2*/	} else if (parser.exists("player1", "p1") || parser.exists("player2", "p2")) {
-			/* Allows just one player to be specified and defaulting the other. */
-			parser.setDefaultValue(defaultPlayer);
-			p1 = parser.handle("player1", "p1");
-			p2 = parser.handle("player2", "p2");
-			parser.setDefaultValue("");
-/*3*/	} else if (args.length >= 2 && !parser.isFlag(args[0]) && !parser.isFlag(args[1])) {
-			/* Requires the first to arguments to be non-flags. */
-			p1 = args[0];
-			p2 = args[1];
-/*4*/	} else {
-			p1 = defaultPlayer;
-			p2 = defaultPlayer;
-		}
-
-		/* Handle various flags */
-		dir = parser.handle("directory", "d");
-
-		/* TODO, need to handle adding the dir on here... 
-		 * IE: add user supplied directory for user supplied players, but
-		 * do not touch the defaultPlayer..
-		 */
-		
-		Othello othello = new Othello(dir, p1, p2);
+		Othello othello = new Othello(p1, p2);
 		othello.run();
 	}
 }

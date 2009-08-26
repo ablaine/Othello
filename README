@@ -1,1 +1,21 @@
 Author: Andrew Blaine
+
+<< Requirements >>
+	- JDK v1.6 (I have not tested earlier versions, they may or may not work)
+	  [http://java.sun.com/]
+	- Java Instructional Gaming(JIG) engine v1.7.5 Build 6 (June 2009)
+	  [http://ai.vancouver.wsu.edu/jig/wiki/index.php/Main_Page]
+
+<< Usage >>
+	java -jar Othello.jar [--help | -h] | [--version | -v]
+		| [--players <path.to.player> <path.to.player> | -p <path.to.player> <path.to.player>]
+		| [--player1 <path.to.player> | -p1 <path.to.player>]
+		| [--player2 <path.to.player> | -p2 <path.to.player>]
+		| [--directory <path.to.implementations> | -d <path.to.implementations>]
+
+<< Examples >>
+	java -jar Othello.jar
+	java -jar Othello.jar --help
+	java -jar Othello.jar impl.ai.SlowRandomPlayer impl.ai.RandomPlayer
+	java -jar Othello.jar SlowRandomPlayer RandomPlayer -d impl.ai
+	java -jar Othello.jar -p1 impl.ai.SlowRandomPlayer

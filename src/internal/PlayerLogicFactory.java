@@ -3,6 +3,7 @@ package internal;
 import api.PlayerLogic;
 import api.State;
 import impl.ai.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,28 +12,19 @@ import java.util.logging.Logger;
  * @author ablaine
  */
 public class PlayerLogicFactory {
-	private static final String AI_PACKAGE = "impl.ai";
 	public static final String HUMAN_PLAYER = "HumanPlayer";
 
-	public PlayerLogic createPlayerLogic(String directory, String className, Player player, State playerState) {
+	public PlayerLogic createPlayerLogic(String className, Player player, State playerState) {
 		if (className.equals(HUMAN_PLAYER)) {
 			return null;//TODO
 		} else {
-			PlayerLogic result = findPlayerLogic(directory, className);
+			PlayerLogic result = findPlayerLogic(className);
 			result._init(player, playerState);
 			return result;
 		}
 	}
 
-	public PlayerLogic createPlayerLogic(String className, Player player, State playerState) {
-		return createPlayerLogic(AI_PACKAGE, className, player, playerState);
-	}
-
-	private PlayerLogic findPlayerLogic(String directory, String className) {
-		String qualifiedName = className;
-		if (directory.length() > 0) {
-			qualifiedName = directory + "." + className;
-		}
+	private PlayerLogic findPlayerLogic(String qualifiedName) {
 		try {
 			Class<?> c = Class.forName(qualifiedName);
 			Object o = c.newInstance();
@@ -46,7 +38,7 @@ public class PlayerLogicFactory {
 			System.exit(0);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			System.err.println("Is " + className + ".class in the " + directory.replace('.', '/') + " directory?");
+			System.err.println("Does this path/to/className.class exist: " + qualifiedName.replace('.', '/') + ".class");
 			System.exit(0);
 		}
 		return null;
