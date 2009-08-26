@@ -2,6 +2,9 @@ package internal;
 
 import api.PlayerLogic;
 import api.State;
+import impl.ai.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +29,10 @@ public class PlayerLogicFactory {
 	}
 
 	private PlayerLogic findPlayerLogic(String directory, String className) {
-		String qualifiedName = directory + "." + className;
+		String qualifiedName = className;
+		if (directory.length() > 0) {
+			qualifiedName = directory + "." + className;
+		}
 		try {
 			Class<?> c = Class.forName(qualifiedName);
 			Object o = c.newInstance();

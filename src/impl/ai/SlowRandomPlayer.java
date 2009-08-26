@@ -3,6 +3,7 @@ package impl.ai;
 import api.GameLogic;
 import api.struct.Board;
 import api.PlayerLogic;
+import internal.Othello;
 import internal.util.UnitConversion;
 import java.awt.Point;
 import java.util.List;
@@ -15,6 +16,11 @@ import java.util.Random;
 public class SlowRandomPlayer extends PlayerLogic {
 	private static final Random rand = new Random();
 	private static final int delay = 1;
+
+	@Override
+	public void init() {
+		System.out.println(Othello.SYSTEM + "This is the \"com.ablaine.Othello\" provided Slow Random AI.");
+	}
 
 	@Override
 	public Point makeMove(Board board, List<Point> validMoves) {

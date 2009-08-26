@@ -62,7 +62,7 @@ public class Match {
 				nextPlayer();
 				validMoves = GameLogic.getValidMoves(board, curPlayer.getState());
 				if (validMoves.size() > 0) { //Other player goes again.
-					System.out.println(curPlayer.getFullName() + " gets to move again!");
+					System.out.println(Othello.SYSTEM + curPlayer.getFullName() + " gets to move again!");
 					aiThread = new AIThread(curPlayer, board.clone(), validMoves.toPoints());
 					alarm.reset();
 					aiThread.start();
@@ -84,7 +84,7 @@ public class Match {
 				return;
 			}
 		} else if (alarm.expired()) {
-			System.out.println(curPlayer.getFullName() + " has just run out of time.");
+			System.out.println(Othello.SYSTEM + curPlayer.getFullName() + " has just run out of time.");
 			updateWinner(otherPlayer(curPlayer).getState());
 			return;
 		}
@@ -127,7 +127,7 @@ public class Match {
 				if (stateManager.stateChange()) {
 					dark.init(State.DARK);
 					light.init(State.LIGHT);
-					System.out.println(dark.getName() + " vs " + light.getName());
+					System.out.println(Othello.SYSTEM + dark.getName() + " vs " + light.getName());
 					stateManager.setCurState(GameState.PLAYING);
 				}
 				break;
@@ -136,13 +136,13 @@ public class Match {
 				break;
 			case GAMEOVER:
 				if (stateManager.stateChange()) {
-					System.out.println("Game is over!");
+					System.out.println(Othello.SYSTEM + "Game is over!");
 					switch (winner) {
 						case EMPTY:
-							System.out.println("It was a tie!");
+							System.out.println(Othello.SYSTEM + "It was a tie!");
 							break;
 						default:
-							System.out.println(winner.toString() + " is the winner!");
+							System.out.println(Othello.SYSTEM + winner.toString() + " is the winner!");
 							break;
 					}
 				}
