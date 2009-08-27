@@ -76,7 +76,7 @@ public class Match {
 		if (aiThread.isReady()) {
 			Move move = aiThread.getMove();
 			if (move != null) {
-				GameLogic.makeMove(board, move);
+				GameLogic.makeDestructiveMove(board, move);
 				nextPlayer();
 				stateManager.setCurState(GameState.PLAYING);
 			} else { // Forfeit turn due to invalid move.

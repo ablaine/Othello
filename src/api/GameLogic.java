@@ -9,16 +9,23 @@ import java.util.LinkedList;
 import java.util.List;
 import jig.engine.GameClock.Alarm;
 
-
 /**
+ * Handles all Othello game logic such as applying a move to a board,
+ * determining valid moves given a state and board, etc.
  *
- * TODO: Allow for passing in playerLogic and auto getting state..?
- *
- * @author ablaine
+ * @author Andrew Blaine
  */
 public class GameLogic {
-	private static Alarm alarm;
+	private static Alarm alarm;//TODO: Consider moving the static alarm into it's own class...
 
+	/**
+	 * This method is reserved for internal use. Note, attempts to call this
+	 * method (aside from the initial call) will fail to have
+	 * any effect. The preceding underscore is a python convention which
+	 * intends to discourage use.
+	 * 
+	 * @param alarm
+	 */
 	public static void _init(Alarm alarm) {
 		if (GameLogic.alarm == null) {
 			GameLogic.alarm = alarm;
@@ -26,21 +33,43 @@ public class GameLogic {
 	}
 
 	/**
-	 * Destructive board modification.
-	 * @param board
-	 * @param move
-	 * @return
+	 * Applies the move to a clone of the input board and returns the clone.
+	 * This will leave the passed in board unchanged.
+	 *
+	 * @param board The board to update.
+	 * @param move The move to apply.
+	 * @return the new board after having applied the move
 	 */
-	public static Board makeMove(Board board, Move move) {
+	public static Board makeHypotheticalMove(Board board, Move move) {
+		Board clone = board.clone();
+		makeDestructiveMove(clone, move);
+		return clone;
+	}
+
+	/**
+	 * Destructively modifies the input board to reflect the changes of the
+	 * move being applied to the passed in board. If an invalid move is passed
+	 * in, the input board will be unmodified.
+	 *
+	 * @param board The board to update.
+	 * @param move The move to apply.
+	 */
+	public static void makeDestructiveMove(Board board, Move move) {
 		FlipList list = new Helper(board, move).getFlipped();
 		State[][] grid = board.getGrid();
 		for (Point p : list) {
 			grid[p.x][p.y] = list.getState();
 		}
 		board.notifyObservers(list);
-		return board;
 	}
-	
+
+	/**
+	 * Returns all valid moves for a given player's state and board.
+	 * 
+	 * @param board The board to examine.
+	 * @param playerState The player who can perform these moves.
+	 * @return a list of valid <code>Move</code>s for this board.
+	 */
 	public static MoveList getValidMoves(Board board, State playerState) {
 		MoveList result = new MoveList();
 		for (int x = 0; x < Board.SIZE; x++) {
@@ -54,26 +83,46 @@ public class GameLogic {
 		return result;
 	}
 
+	/**
+	 * Determines whether the input move being applied to the input board is
+	 * valid.
+	 * 
+	 * @param board The board to examine.
+	 * @param move The move to check.
+	 * @return a boolean specifying whether this move would be valid.
+	 */
 	public static boolean isValidMove(Board board, Move move) {
 		return new Helper(board, move).getFlipped().size() > 0;
 	}
-
-	// These two seem out of place since they are just always for the current
-	// player. Hmm..
-	/**
-	 * Returns the current player's remaining time to make a move. Result is
-	 * in nanoseconds.
-	 * @return
+	
+	/** TODO: double check nanoseconds claim
+	 * Returns the currently remaining time for the current player to make a
+	 * move. The number is in nanoseconds.
+	 *
+	 * @return a long reperesenting the remaining time to decide your move
 	 */
 	public static long getRemainingTime() {
 		return alarm.remainingTime();
 	}
-
+	
+	/** TODO: double check nanoseconds claim // Possibly unnecessary method..
+	 * Returns the elapsed time for the current player since they were given
+	 * control to make a move. The number is in nanoseconds.
+	 *
+	 * @return a long reperesenting the elapsed time since you were requested
+	 * to move
+	 */
 	public static long getElapsedTime() {
 		return alarm.elapsedTime();
 	}
 }
 
+/**
+ * A helper class to test moves against boards. Using a few unchanging global
+ * variables alleviates much of the overhead of passing these values around.
+ * 
+ * @author Andrew Blaine
+ */
 class Helper {
 	private final Point loc;
 	private final State state;
@@ -90,6 +139,12 @@ class Helper {
 		this.board = board;
 	}
 
+	/**
+	 * Returns a list of points that can be flipped by this object. By Othello
+	 * logic, if this list is empty, then the move is considered invalid.
+	 * 
+	 * @return a list of points and the state that performed the action
+	 */
 	public FlipList getFlipped() {
 		if (flipped == null) {
 			flipped = new FlipList(state);
