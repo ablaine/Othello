@@ -1,13 +1,14 @@
 package impl.ai;
 
-import api.GameLogic;
-import api.struct.Board;
-import api.PlayerLogic;
-import internal.Othello;
-import internal.util.UnitConversion;
 import java.awt.Point;
 import java.util.List;
 import java.util.Random;
+
+import internal.Othello;
+import api.GameClock;
+import api.PlayerLogic;
+import api.struct.Board;
+import api.util.UnitConversion.Unit;
 
 /**
  *
@@ -15,19 +16,22 @@ import java.util.Random;
  */
 public class SlowRandomPlayer extends PlayerLogic {
 	private static final Random rand = new Random();
-	private static final int delay = 1;
+	private static final long delay = 1; // In seconds
+	private static final long minTimeLeft = 1; // In seconds
+	private GameClock clock;
 
 	@Override
 	public void init() {
 		System.out.println(Othello.SYSTEM + "This is the \"com.ablaine.Othello\" provided Slow Random AI.");
+		clock = getGameClock();
 	}
 
 	@Override
 	public Point makeMove(Board board, List<Point> validMoves) {
-		while (GameLogic.getRemainingTime() > UnitConversion.secondToNanosecond(1)) {
+		while (clock.getRemainingTime(Unit.SECOND) > minTimeLeft) {
 			System.out.print("");//Wierd bug..
 			if (delay > 0) {
-				if (GameLogic.getElapsedTime() >= UnitConversion.secondToNanosecond(delay)) {
+				if (clock.getElapsedTime(Unit.SECOND) >= delay) {
 					break;
 				}
 			}

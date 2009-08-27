@@ -1,5 +1,6 @@
 package internal;
 
+import api.GameClock;
 import java.awt.Point;
 import java.util.List;
 
@@ -18,11 +19,13 @@ public class Player {
 	private int ties = 0;
 	private int losses = 0;
 
+	private final GameClock clock;
 	private final String logicClassName;
 	private PlayerLogic logic;
 
-	public Player(String playerLogic) {
+	public Player(String playerLogic, GameClock clock) {
 		this.logicClassName = playerLogic;
+		this.clock = clock;
 	}
 
 	public void init(State s) {
@@ -77,6 +80,10 @@ public class Player {
 			return logic.getState();
 		}
 		return State.EMPTY;
+	}
+
+	public GameClock getGameClock() {
+		return clock;
 	}
 
 	public void updateWins()   { wins++;   }

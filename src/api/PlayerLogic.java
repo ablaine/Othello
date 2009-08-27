@@ -69,6 +69,10 @@ public abstract class PlayerLogic {
 	public final State getState() {
 		return state;
 	}
+
+	public final GameClock getGameClock() {
+		return player.getGameClock();
+	}
 	
 	/**
 	 * An optional hook that is called prior to the beginning the match. You

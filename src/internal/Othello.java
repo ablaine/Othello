@@ -1,5 +1,6 @@
 package internal;
 
+import api.GameClock;
 import internal.util.InputParser;
 import api.GameLogic;
 import jig.engine.RenderingContext;
@@ -14,7 +15,8 @@ import internal.view.View;
 import api.struct.Board;
 import impl.ai.RandomPlayer;
 import internal.util.InputHandler;
-import internal.util.UnitConversion;
+import api.util.UnitConversion;
+import api.util.UnitConversion.Unit;
 import java.util.List;
 import jig.engine.GameClock.Alarm;
 
@@ -49,13 +51,15 @@ public class Othello extends StaticScreenGame {
 		Board board = BoardFactory.createDefaultOthelloBoard();
 		BoardDisplay boardDisplay = new BoardDisplay(board, tileLayer);
 		view = new View(boardDisplay);
-		int seconds = 3;
 
-		Alarm alarm = theClock.setAlarm(UnitConversion.secondToNanosecond(seconds));
-		Player dark = new Player(player1);
-		Player light = new Player(player2);
+		//Both players and the match have the same instance of "alarm", but the
+		//players gets one wrapped in GameClock, which provides a different API.
+		int timePerTurn = 3; //Seconds
+		Alarm alarm = theClock.setAlarm(UnitConversion.convert(timePerTurn, Unit.SECOND, Unit.NANOSECOND));
+		GameClock gameClock = new GameClock(alarm);
+		Player dark = new Player(player1, gameClock);
+		Player light = new Player(player2, gameClock);
 
-		GameLogic._init(alarm);
 		match = new Match(alarm, board, dark, light);
 	}
 

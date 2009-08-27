@@ -16,21 +16,6 @@ import jig.engine.GameClock.Alarm;
  * @author Andrew Blaine
  */
 public class GameLogic {
-	private static Alarm alarm;//TODO: Consider moving the static alarm into it's own class...
-
-	/**
-	 * This method is reserved for internal use. Note, attempts to call this
-	 * method (aside from the initial call) will fail to have
-	 * any effect. The preceding underscore is a python convention which
-	 * intends to discourage use.
-	 * 
-	 * @param alarm
-	 */
-	public static void _init(Alarm alarm) {
-		if (GameLogic.alarm == null) {
-			GameLogic.alarm = alarm;
-		}
-	}
 
 	/**
 	 * Applies the move to a clone of the input board and returns the clone.
@@ -93,27 +78,6 @@ public class GameLogic {
 	 */
 	public static boolean isValidMove(Board board, Move move) {
 		return new Helper(board, move).getFlipped().size() > 0;
-	}
-	
-	/** TODO: double check nanoseconds claim
-	 * Returns the currently remaining time for the current player to make a
-	 * move. The number is in nanoseconds.
-	 *
-	 * @return a long reperesenting the remaining time to decide your move
-	 */
-	public static long getRemainingTime() {
-		return alarm.remainingTime();
-	}
-	
-	/** TODO: double check nanoseconds claim // Possibly unnecessary method..
-	 * Returns the elapsed time for the current player since they were given
-	 * control to make a move. The number is in nanoseconds.
-	 *
-	 * @return a long reperesenting the elapsed time since you were requested
-	 * to move
-	 */
-	public static long getElapsedTime() {
-		return alarm.elapsedTime();
 	}
 }
 
