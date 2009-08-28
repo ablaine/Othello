@@ -17,6 +17,7 @@ import impl.ai.RandomPlayer;
 import internal.util.InputHandler;
 import api.util.UnitConversion;
 import api.util.UnitConversion.Unit;
+import java.util.LinkedList;
 import java.util.List;
 import jig.engine.GameClock.Alarm;
 
@@ -28,7 +29,7 @@ public class Othello extends StaticScreenGame {
 
 	public static final String SYSTEM = "<SYSTEM> ";
 
-	private enum GameState { INIT, PLAYING, GAMEOVER }
+	private enum GameState { INIT, TOURNAMENT_IN_SESSION, TOURNAMENT_OVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 
 	public static final String RSC_PATH = "internal/resources/";
@@ -36,8 +37,8 @@ public class Othello extends StaticScreenGame {
 
 	private final AbstractBodyLayer<VanillaAARectangle> tileLayer;
 
-	private final View view;
-	private final Match match;
+	private final View view;//TODO
+	private final Tournament tournament;
 
 	public Othello(String player1, String player2) {
 		super(View.WORLD_WIDTH, View.WORLD_HEIGHT, false);
@@ -45,22 +46,27 @@ public class Othello extends StaticScreenGame {
 		gameframe.setTitle("Othello");
 
 		tileLayer = new AbstractBodyLayer.IterativeUpdate<VanillaAARectangle>();
-
 		gameObjectLayers.add(tileLayer);
 
-		Board board = BoardFactory.createDefaultOthelloBoard();
-		BoardDisplay boardDisplay = new BoardDisplay(board, tileLayer);
+		BoardDisplay boardDisplay = new BoardDisplay(tileLayer);
 		view = new View(boardDisplay);
 
-		//Both players and the match have the same instance of "alarm", but the
-		//players gets one wrapped in GameClock, which provides a different API.
-		int timePerTurn = 3; //Seconds
+		long timePerTurn = 3; //Seconds
 		Alarm alarm = theClock.setAlarm(UnitConversion.convert(timePerTurn, Unit.SECOND, Unit.NANOSECOND));
-		GameClock gameClock = new GameClock(alarm);
-		Player dark = new Player(player1, gameClock);
-		Player light = new Player(player2, gameClock);
+		MatchFactory matchFactory = new MatchFactory(alarm, boardDisplay);
 
-		match = new Match(alarm, board, dark, light);
+		GameClock gameClock = new GameClock(alarm);
+
+		Player[] players = new Player[] {
+			new Player(player1, gameClock),
+			new Player(player1, gameClock),
+			new Player(player2, gameClock),
+			new Player(player2, gameClock)
+		};
+
+		int totalMatches = 2;
+		ContestantManager contestantManager =  new ContestantManager(players, totalMatches);
+		tournament = new Tournament(matchFactory, contestantManager);
 	}
 
 	@Override
@@ -68,11 +74,14 @@ public class Othello extends StaticScreenGame {
 		super.update(deltaMs);
 		switch(stateManager.getCurState()) {
 			case INIT:
-				match.update(deltaMs);
+				if (stateManager.isStateChange()) {
+					stateManager.setCurState(GameState.TOURNAMENT_IN_SESSION);
+				}
 				break;
-			case PLAYING:
+			case TOURNAMENT_IN_SESSION:
+				tournament.update(deltaMs);
 				break;
-			case GAMEOVER:
+			case TOURNAMENT_OVER:
 				break;
 		}
 	}

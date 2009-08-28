@@ -46,7 +46,7 @@ public abstract class PlayerLogic {
 	 * @return this player logic's name
 	 */
 	public final String getName() {
-		return player.getName();
+		return player.getClassName();
 	}
 
 	/**

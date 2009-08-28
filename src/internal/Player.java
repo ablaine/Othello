@@ -8,6 +8,7 @@ import api.struct.Board;
 import api.struct.Move;
 import api.PlayerLogic;
 import api.State;
+import java.util.Random;
 
 /**
  *
@@ -22,10 +23,16 @@ public class Player {
 	private final GameClock clock;
 	private final String logicClassName;
 	private PlayerLogic logic;
+	private final String nickname;
 
-	public Player(String playerLogic, GameClock clock) {
+	public Player(String playerLogic, GameClock clock, String nickname) {
 		this.logicClassName = playerLogic;
 		this.clock = clock;
+		this.nickname = nickname;
+	}
+
+	public Player(String playerLogic, GameClock clock) {
+		this(playerLogic, clock, RandomWordGenerator.createRandomWord());
 	}
 
 	public void init(State s) {
@@ -35,9 +42,9 @@ public class Player {
 
 	public void cleanup() {
 		if (isActive()) {
-			logic.gameOver();
+			logic.gameOver();//TODO: Players have no access to the board..
 			logic = null;
-			System.gc(); //Attempt to cleanup leftover memory
+//			System.gc(); //Attempt to cleanup leftover memory
 		}
 	}
 
@@ -67,12 +74,20 @@ public class Player {
 		return logic != null;
 	}
 
-	public String getName() {
+	public String getClassName() {
 		return logicClassName;
 	}
 
+	public String getNickname() {
+		return nickname;
+	}
+
+	public String getNicknameAndState() {
+		return getNickname() + "(" + getState().toString() + ")";
+	}
+
 	public String getFullName() {
-		return getName() + "(" + getState().toString() + ")";
+		return getClassName() + "#" + getNickname();
 	}
 
 	public State getState() {
@@ -110,5 +125,4 @@ public class Player {
 	public String toString() {
 		return getFullName();
 	}
-
 }

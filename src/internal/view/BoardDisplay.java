@@ -13,9 +13,15 @@ import api.struct.FlipList;
  * @author ablaine
  */
 public class BoardDisplay implements Observer {
+	private final AbstractBodyLayer<VanillaAARectangle> tileLayer;
 	private Tile[][] board;
 
-	public BoardDisplay(Board actualBoard, AbstractBodyLayer<VanillaAARectangle> tileLayer) {
+	public BoardDisplay(AbstractBodyLayer<VanillaAARectangle> tileLayer) {
+		this.tileLayer = tileLayer;
+	}
+
+	public void provideBoard(Board actualBoard) {
+		tileLayer.clear();
 		board = new Tile[Board.SIZE][Board.SIZE];
 		for (int x = 0; x < Board.SIZE; x++) {
 			for (int y = 0; y < Board.SIZE; y++) {

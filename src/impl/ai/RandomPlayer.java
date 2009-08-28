@@ -15,7 +15,7 @@ public class RandomPlayer extends PlayerLogic {
 
 	@Override
 	public void init() {
-		System.out.println("This is the \"com.ablaine.Othello\" provided Random AI.");
+//		System.out.println("This is the \"com.ablaine.Othello\" provided Random AI.");
 	}
 
 	@Override

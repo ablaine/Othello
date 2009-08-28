@@ -41,7 +41,7 @@ public class StateManager<E> {
 	 * Returns true only once per state change.
 	 * @return
 	 */
-	public boolean stateChange() {
+	public boolean isStateChange() {
 		if (stateChange) {
 			stateChange = false;
 			return true;
