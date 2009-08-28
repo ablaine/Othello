@@ -2,7 +2,6 @@ package impl.ai;
 
 import api.PlayerLogic;
 import api.struct.Board;
-import internal.Othello;
 import java.awt.Point;
 import java.util.List;
 import java.util.Random;
@@ -16,7 +15,7 @@ public class RandomPlayer extends PlayerLogic {
 
 	@Override
 	public void init() {
-		System.out.println(Othello.SYSTEM + "This is the \"com.ablaine.Othello\" provided Random AI.");
+		System.out.println("This is the \"com.ablaine.Othello\" provided Random AI.");
 	}
 
 	@Override

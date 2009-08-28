@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Random;
 
-import internal.Othello;
 import api.GameClock;
 import api.PlayerLogic;
 import api.struct.Board;
@@ -22,7 +21,7 @@ public class SlowRandomPlayer extends PlayerLogic {
 
 	@Override
 	public void init() {
-		System.out.println(Othello.SYSTEM + "This is the \"com.ablaine.Othello\" provided Slow Random AI.");
+		System.out.println("This is the \"com.ablaine.Othello\" provided Slow Random AI.");
 		clock = getGameClock();
 	}
 
