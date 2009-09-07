@@ -40,12 +40,7 @@ public class GameLogic {
 	 * @param move The move to apply.
 	 */
 	public static void makeDestructiveMove(Board board, Move move) {
-		FlipList list = new Helper(board, move).getFlipped();
-		State[][] grid = board.getGrid();
-		for (Point p : list) {
-			grid[p.x][p.y] = list.getState();
-		}
-		board.notifyObservers(list);
+		board.modify(new Helper(board, move).getFlipped());
 	}
 
 	/**

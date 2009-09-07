@@ -5,6 +5,7 @@ import api.State;
 import api.struct.MoveList;
 import api.struct.Board;
 import api.struct.Move;
+import internal.util.Observable;
 import internal.util.StateManager;
 import jig.engine.GameClock.Alarm;
 
@@ -14,7 +15,7 @@ import jig.engine.GameClock.Alarm;
  * 
  * @author Andrew Blaine
  */
-public class Match {
+public class Match extends Observable {
 	private enum GameState { INIT, PLAYING, GAME_OVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 
@@ -25,7 +26,6 @@ public class Match {
 	private final Player light;
 	private Player curPlayer;
 	private AIThread aiThread;
-	private State winner = null;
 
 	public Match(Matchup matchup, Board board, Alarm alarm) {
 		this.matchup = matchup;
@@ -72,12 +72,12 @@ public class Match {
 				nextPlayer();
 				stateManager.setCurState(GameState.PLAYING);
 			} else { // Forfeit turn due to invalid move.
-				gameOver(otherPlayer(curPlayer));
+				gameOver(matchup.otherPlayer(curPlayer));
 				return;
 			}
 		} else if (alarm.expired()) {
 			System.out.println(Othello.SYSTEM + curPlayer.getNicknameAndState() + " has just run out of time.");
-			gameOver(otherPlayer(curPlayer));
+			gameOver(matchup.otherPlayer(curPlayer));
 			return;
 		}
 	}
@@ -95,12 +95,6 @@ public class Match {
 	}
 	
 	private void gameOver(Player winner) {
-		//TODO: maybe can get rid of this..
-		if (winner == null) {
-			this.winner = State.EMPTY;
-		} else {
-			this.winner = winner.getState();
-		}
 		matchup.playedMatch(winner);
 		stateManager.setCurState(GameState.GAME_OVER);
 	}
@@ -119,18 +113,16 @@ public class Match {
 			case PLAYING:
 				playPly();
 				break;
-			case GAME_OVER://TODO FIXME: This state is never seen, tournament intercepts...
+			case GAME_OVER:
 				if (stateManager.isStateChange()) {
 					System.out.print(Othello.SYSTEM + "Game is over... ");
-					switch (winner) {
-						case EMPTY:
-							System.out.println("it was a tie!");
-							break;
-						default:
-							System.out.println(winner.toString() + " is the winner!");//TODO: winner is a state, can't
-															// do winner.getNicknameAndState() ...
-							break;
+					MatchStatus matchStatus = matchup.getPreviousMatchState();
+					if (matchStatus.getState() == MatchStatus.State.TIED) {
+						System.out.println("it was a tie!");
+					} else if (matchStatus.getState() == MatchStatus.State.WINNER) {
+						System.out.println(matchStatus.getWinner().getNicknameAndState() + " is the winner!");
 					}
+					notifyGameOverObservers();
 				}
 				break;
 		}
@@ -139,19 +131,7 @@ public class Match {
 	/* MINOR CONVENIENCE METHODS
 	 **************************************************************************/
 
-	private Player otherPlayer(Player p) {
-		if (dark == p) { //Checking memory address
-			return light;
-		} else {
-			return dark;
-		}
-	}
-
-	private void nextPlayer() {//NOTE: Do NOT set GameState PLAYING here.
-		curPlayer = otherPlayer(curPlayer);
-	}
-
-	public boolean isGameOver() {
-		return winner != null;
+	private void nextPlayer() {//NOTE: Do NOT set GameState.PLAYING here.
+		curPlayer = matchup.otherPlayer(curPlayer);
 	}
 }

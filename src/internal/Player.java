@@ -1,5 +1,6 @@
 package internal;
 
+import internal.util.RandomWordGenerator;
 import api.GameClock;
 import java.awt.Point;
 import java.util.List;
@@ -125,4 +126,13 @@ public class Player {
 	public String toString() {
 		return getFullName();
 	}
+}
+
+class BadMoveException extends Exception {
+	private static final long serialVersionUID = 1L;
+
+	public BadMoveException(String message) {
+		super(message);
+	}
+
 }

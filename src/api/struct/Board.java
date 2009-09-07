@@ -1,8 +1,8 @@
 package api.struct;
 
 import api.State;
+import internal.util.Observable;
 import java.awt.Point;
-import java.util.Observable;
 
 /**
  * Represents a simple Othello game board.
@@ -98,14 +98,16 @@ public final class Board extends Observable implements Cloneable {
 	}
 
 	/**
-	 * Updates the view with the most recent changes to the board.
+	 * Provides a quick way to change multiple points to a specific state,
+	 * regardless of the game rules.
 	 * 
-	 * @param arg A <code>FlipList</code> of what has changed.
+	 * @param flipList the list of points to change
 	 */
-	@Override
-	public void notifyObservers(Object arg) {
-		setChanged();
-		super.notifyObservers(arg);
+	public void modify(FlipList flipList) {
+		for (Point p : flipList) {
+			grid[p.x][p.y] = flipList.getState();
+		}
+		notifyBoardObservers(flipList);
 	}
 
 	/**

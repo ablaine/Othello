@@ -2,17 +2,17 @@ package internal.view;
 
 import java.awt.Point;
 import java.util.Observable;
-import java.util.Observer;
 import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.physics.vpe.VanillaAARectangle;
 import api.struct.Board;
 import api.struct.FlipList;
+import internal.util.BoardObserver;
 
 /**
  *
  * @author ablaine
  */
-public class BoardDisplay implements Observer {
+public class BoardDisplay implements BoardObserver {
 	private final AbstractBodyLayer<VanillaAARectangle> tileLayer;
 	private Tile[][] board;
 
@@ -30,7 +30,7 @@ public class BoardDisplay implements Observer {
 				tileLayer.add(t);
 			}
 		}
-		actualBoard.addObserver(this);
+		actualBoard.registerObserver(this);
 	}
 
 	public void update(Observable o, Object arg) {
@@ -39,6 +39,14 @@ public class BoardDisplay implements Observer {
 		for (Point p : listToFlip) {
 			Point loc = p.getLocation();
 			board[loc.x][loc.y].setState(listToFlip.getState());
+		}
+	}
+
+	@Override
+	public void updateBoard(FlipList flipList) {
+		for (Point p : flipList) {
+			Point loc = p.getLocation();
+			board[loc.x][loc.y].setState(flipList.getState());
 		}
 	}
 }

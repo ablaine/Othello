@@ -1,4 +1,4 @@
-package internal;
+package internal.util;
 
 import java.util.Random;
 
@@ -7,6 +7,8 @@ import java.util.Random;
  * @author ablaine
  */
 public class RandomWordGenerator {
+	private static final int DEFAULT_MIN_SIZE = 4;
+	private static final int DEFAULT_MAX_SIZE = 10;
 	private static final Random RANDOM = new Random();
 	private static char[] ASCII = null;
 
@@ -19,9 +21,7 @@ public class RandomWordGenerator {
 	}
 
 	public static String createRandomWord() {
-		int min = 4;
-		int max = 10;
-		return createRandomWord(RANDOM.nextInt(max - min) + min);
+		return createRandomWord(RANDOM.nextInt(DEFAULT_MAX_SIZE - DEFAULT_MIN_SIZE) + DEFAULT_MIN_SIZE);
 	}
 
 	private static char getRandomLetter() {

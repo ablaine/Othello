@@ -1,5 +1,6 @@
 package internal;
 
+import internal.util.GameOverObserver;
 import internal.util.StateManager;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  *
  * @author Andrew Blaine
  */
-public class Tournament {
+public class Tournament implements GameOverObserver {
 	private enum GameState { INIT, MATCH_IN_SESSION, MATCH_OVER, TOURNAMENT_OVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 	
@@ -31,15 +32,11 @@ public class Tournament {
 				if (stateManager.isStateChange()) {
 					Matchup matchup = contestantManager.getNextMatchup();
 					match = matchFactory.createMatch(matchup);
+					match.registerObserver(this);
 					stateManager.setCurState(GameState.MATCH_IN_SESSION);
 				}
 				break;
 			case MATCH_IN_SESSION:
-				if (match.isGameOver()) {
-					match.update(deltaMs);//TEMP: One last one.
-					stateManager.setCurState(GameState.MATCH_OVER);
-					break;
-				}
 				match.update(deltaMs);
 				break;
 			case MATCH_OVER:
@@ -58,5 +55,8 @@ public class Tournament {
 		}
 	}
 
-
+	@Override
+	public void updateGameOver() {
+		stateManager.setCurState(GameState.MATCH_OVER);
+	}
 }
