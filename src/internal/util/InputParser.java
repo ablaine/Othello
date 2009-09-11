@@ -2,116 +2,71 @@ package internal.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author ablaine
  */
-public class InputParser {
-	private List<String> inputs;
-	private String defaultValue = "";
+public class InputParser extends HashMap<String, List<String>> {
+	public final static String COMMENT = "//";
+	public final static String FLAG = "-";
 
-	public InputParser(String[] args) {
-		inputs = new ArrayList<String>(Arrays.asList(args));
+	private InputParser(Map<String, List<String>> map) {
+		super(map);
+	}
+
+	public static InputParser createKeyValueStore(String[] args) {
+		return new InputParser(groupKeysToValues(removeComments(args)));
+	}
+	
+	private static Map<String, List<String>> groupKeysToValues(String[] args) {
+		Map<String, List<String>> result = new HashMap<String, List<String>>();
+		for (int key = 0; key < args.length; key++) {
+			if (args[key].startsWith(FLAG)) {
+				List<String> values = new ArrayList<String>();
+				for (int value = key + 1; value < args.length; value++) {
+					if (args[value].startsWith(FLAG)) {
+						break;
+					} else {
+						values.add(args[value]);
+					}
+				}
+				result.put(args[key], values);
+			}
+		}
+		return result;
+	}
+
+	private static String[] removeComments(String[] args) {
+		String[] result = args;
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].startsWith("//")) {
-				inputs = inputs.subList(0, i);
+			if (args[i].startsWith(COMMENT)) {
+				result = Arrays.copyOfRange(args, 0, i);
 				break;
 			}
 		}
+		return result;
 	}
 
-	public String getArg(int item) {
-		return isArg(item) ? inputs.get(item) : null;
-	}
-
-	/**
-	 * Tests 
-	 */
-//	public static void main(String[] args) {
-//		String[] myArgs = "-blah something again --testing // no ok blah -asdf".split(" ");
-//
-//		InputParser ip = new InputParser(myArgs);
-//		List<String> blah = ip.parsePref("blah");
-//		System.out.println(":: -blah");
-//		for (String s : blah) {
-//			System.out.println(s);
-//		}
-//		List<String> testing = ip.parsePref("testing");
-//		System.out.println(":: -testing");
-//		for (String s : testing) {
-//			System.out.println(s);
-//		}
-//		List<String> notfound = ip.parsePref("notfound");
-//		System.out.println(":: -notfound");
-//		if (notfound != null) {
-//			for (String s : notfound) {
-//				System.out.println(s);
-//			}
-//		}
-//	}
-
-	public void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
-	public boolean isValue(int index) {
-		return !isFlag(getArg(index));
-	}
-
-	private boolean isArg(int index) {
-		return index < inputs.size();
-	}
-
-	public boolean isFlag(int index) {
-		return isFlag(getArg(index));
-	}
-
-	public boolean isFlag(String flag) {
-		return flag != null ? flag.startsWith("-") : false;
-	}
-
-	public boolean exists(String flag) {
-		return exists(flag, flag);
-	}
-
-	public boolean exists(String fullFlag, String shortFlag) {
-		return parsePref(fullFlag, shortFlag) != null;
-	}
-
-	public String handle(String flag) {
-		return handle(flag, flag);
-	}
-
-	public String handle(String fullFlag, String shortFlag) {
-		List<String> parsed = parsePref(fullFlag, shortFlag);
-		if (parsed != null) {
-			if (parsed.size() >= 1) {
-				return parsed.get(0);
+	public boolean containsKey(Object... keys) {
+		for (Object o : keys) {
+			if (containsKey(o)) {
+				return true;
 			}
 		}
-		return defaultValue;
+		return false;
 	}
 
-	public List<String> parsePref(String flag) {
-		return parsePref(flag, flag);//Whats the worst that could happen.. :D
-	}
-
-	public List<String> parsePref(String fullFlag, String shortFlag) {
-		List<String> result = null;
-		for (String s : inputs) {
-			if (result == null) {//Have not found the flag yet.
-				//Check to see if this is the flag.
-				if (s.equals("--" + fullFlag) || s.equals("-" + shortFlag)) {
-					result = new ArrayList<String>();//Sigifies flag was found
-				}
-			} else {//We have the flag, add following words until we hit "-"
-				if (isFlag(s)) {
-					break;//That must be a different flag
-				} else {
-					result.add(s);
-				}
+	public List<String> get(Object... keys) {
+		List<String> result = new LinkedList<String>();
+		for (Object o : keys) {
+			List<String> items = get(o);
+			if (items != null) {
+				result.addAll(items);
 			}
 		}
 		return result;

@@ -1,6 +1,7 @@
 package internal.util;
 
 import impl.ai.RandomPlayer;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -8,77 +9,118 @@ import java.util.List;
  * @author ablaine
  */
 public class InputHandler {
-	private static final String defaultPlayer = RandomPlayer.class.getCanonicalName();
+	public static final String[] PLAYER_FLAGS = { "-p", "--player", "--players" };
+	public static final String[] DIRECTORY_FLAGS = { "-d", "-dir", "-directory" };
+	public static final String[] NUMBER_OF_GAMES_FLAGS = { "-g", "--games" };
+	public static final String[] TIME_LIMIT_FLAGS = { "-t", "--timeLimit" };
+	public static final String DEFAULT_PLAYER = RandomPlayer.class.getCanonicalName();
 
 	private final InputParser parser;
-	private String player1;
-	private String player2;
 
 	public InputHandler(InputParser parser) {
 		this.parser = parser;
-
 		handleQuickExits();
-		handlePlayers();
 	}
 
-	public String getPlayer1() {
-		return player1;
+	public List<String> getPlayers() {
+		List<String> players = new LinkedList<String>();
+		if (parser.containsKey((Object[])PLAYER_FLAGS)) {
+			players = parser.get((Object[])PLAYER_FLAGS);
+		}
+		List<String> result = prependDirectory(players);
+		while (result.size() < 2) {
+			result.add(DEFAULT_PLAYER);
+		}
+		return result;
 	}
 
-	public String getPlayer2() {
-		return player2;
-	}
-
-	private void handlePlayers() {
-		/* The vars to fill */
-		String p1, p2;
-		p1 = p2 = null;
-
-		/* Handle player strings: The #'s show precedence. */
-		List<String> players = parser.parsePref("players", "p");
-		parser.setDefaultValue(null);
-/*1*/	if (players != null && players.size() >= 2) {
-			p1 = players.get(0);
-			p2 = players.get(1);
-/*2*/	} else if (parser.exists("player1", "p1") || parser.exists("player2", "p2")) {
-			/* Allows just one player to be specified and defaulting the other. */
-			p1 = parser.handle("player1", "p1");
-			p2 = parser.handle("player2", "p2");
-/*3*/	} else {
-			/* Requires the first to arguments to be non-flags and non-null. */
-			if (parser.isValue(0) && parser.isValue(1)) {
-				p1 = parser.getArg(0);
-				p2 = parser.getArg(1);
+	public int getGamesPerMatchup() {
+		String error = "<ERROR> --games\n\t";
+		int result = 1;
+		if (parser.containsKey((Object[])NUMBER_OF_GAMES_FLAGS)) {
+			List<String> games = parser.get((Object[])NUMBER_OF_GAMES_FLAGS);
+			if (games.size() != 1) {
+				printUsageAndQuit(error + "Please pass only single number.");
+			}
+			try {
+				result = Integer.parseInt(games.get(0));
+			} catch (NumberFormatException e) {
+				printUsageAndQuit(error + "Please use digits.");
+			}
+			if (result < 0) {
+				printUsageAndQuit(error + "Please use non-negative number.");
 			}
 		}
-		String dir = parser.handle("directory", "d"); //Only used in user supplied players
-		p1 = prependDirectory(p1, dir);
-		p2 = prependDirectory(p2, dir);
-		if (p1 == null) {
-			p1 = defaultPlayer;
-		}
-		if (p2 == null) {
-			p2 = defaultPlayer;
-		}
-		player1 = p1;
-		player2 = p2;
+
+		return result;
 	}
 
-	private String prependDirectory(String player, String dir) {
-		if (player != null && dir != null) {
-			player = dir + "." + player;
+	private List<String> prependDirectory(List<String> players) {
+		String directory = getDirectory();
+		if (directory == null) {
+			return players;
 		}
-		return player;
+		List<String> result = new LinkedList<String>();
+		for (String player : players) {
+			result.add(directory + "." + player);
+		}
+		return result;
+	}
+
+	public String getDirectory() {
+		String error = "<ERROR> --directory\n\t";
+		String result = null;
+		if (parser.containsKey((Object[])DIRECTORY_FLAGS)) {
+			List<String> directory = parser.get((Object[])DIRECTORY_FLAGS);
+			if (directory.size() != 1) {
+				printUsageAndQuit(error + "Please pass only a single directory.");
+			}
+			result = directory.get(0);
+		}
+		return result;
+	}
+
+	public long getTimeLimitPerTurn() {
+		String error = "<ERROR> --timeLimit\n\t";
+		long result = 0;
+		if (parser.containsKey((Object[])TIME_LIMIT_FLAGS)) {
+			List<String> timeLimit = parser.get((Object[])TIME_LIMIT_FLAGS);
+			if (timeLimit.size() != 1) {
+				printUsageAndQuit(error + "Please pass only a single value.");
+			}
+			try {
+				result = Long.parseLong(timeLimit.get(0));
+			} catch (NumberFormatException e) {//TODO: Parse for more than nanoseconds.
+				printUsageAndQuit(error + "Please use digits only, specified in nanoseconds.");
+			}
+			if (result < 0) {
+				printUsageAndQuit(error + "Please use non-negative number.");
+			}
+		}
+		return result;
+	}
+
+	public String usage() {
+		return "";
+	}
+
+	private void printUsageAndQuit(String errorMessage) {
+		System.err.println(errorMessage);
+		printUsageAndQuit();
+	}
+
+	private void printUsageAndQuit() {
+		System.out.println(usage());
+		System.exit(0);
 	}
 
 	private void handleQuickExits() {
-		if (parser.exists("help", "h")) {
-			//Print usage..
-			System.exit(0);
+		if (parser.containsKey("-h", "--help")) {
+			printUsageAndQuit();
 		}
-		if (parser.exists("version", "v")) {
+		if (parser.containsKey("-v", "--version")) {
 			//Print version
-			System.out.println("Othello version 2.2");
+			System.out.println("Othello version 2.5");
 			System.out.println("Written by Andrew Blaine [http://ablaine.com]");
 			System.exit(0);
 		}

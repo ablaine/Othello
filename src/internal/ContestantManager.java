@@ -7,12 +7,12 @@ public class ContestantManager {
 	private final List<Matchup> matchups;
 	private int matchupIndex = 0; //Always points at the current matchup in play
 
-	public ContestantManager(Player[] players, int totalMatches) {
+	public ContestantManager(List<Player> players, int totalMatches) {
 		matchups = new LinkedList<Matchup>();
-		for (int i = 0; i < players.length; i++) {
-			Player p1 = players[i];
-			for (int j = i+1; j < players.length; j++) {
-				Player p2 = players[j];
+		for (int i = 0; i < players.size(); i++) {
+			Player p1 = players.get(i);
+			for (int j = i + 1; j < players.size(); j++) {
+				Player p2 = players.get(j);
 				matchups.add(new Matchup(p1, p2, totalMatches));
 			}
 		}
@@ -36,5 +36,14 @@ public class ContestantManager {
 			}
 		}
 		return matchup;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Matchup m : matchups) {
+			sb.append("\t" + m.toString() + "\n");
+		}
+		return sb.toString();
 	}
 }

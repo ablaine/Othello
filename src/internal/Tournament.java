@@ -49,7 +49,7 @@ public class Tournament implements GameOverObserver {
 				}
 				break;
 			case TOURNAMENT_OVER://TODO: Print results
-				System.out.println(Othello.SYSTEM + "WOOOOO, tourny over!");
+				System.out.println(Othello.SYSTEM + "Tournement has ended.");
 				System.exit(0);
 				break;
 		}

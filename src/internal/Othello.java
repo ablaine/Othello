@@ -17,6 +17,7 @@ import impl.ai.RandomPlayer;
 import internal.util.InputHandler;
 import api.util.UnitConversion;
 import api.util.UnitConversion.Unit;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import jig.engine.GameClock.Alarm;
@@ -40,7 +41,7 @@ public class Othello extends StaticScreenGame {
 	private final View view;//TODO
 	private final Tournament tournament;
 
-	public Othello(String player1, String player2) {
+	public Othello(List<String> playerClassNames, int gamesPerMatchup, long timeLimitInNanoseconds) {
 		super(View.WORLD_WIDTH, View.WORLD_HEIGHT, false);
 		ResourceFactory.getFactory().loadResources(RSC_PATH, "resources.xml");
 		gameframe.setTitle("Othello");
@@ -51,21 +52,31 @@ public class Othello extends StaticScreenGame {
 		BoardDisplay boardDisplay = new BoardDisplay(tileLayer);
 		view = new View(boardDisplay);
 
-		long timePerTurn = 3; //Seconds
-		Alarm alarm = theClock.setAlarm(UnitConversion.convert(timePerTurn, Unit.SECOND, Unit.NANOSECOND));
+		Alarm alarm = theClock.setAlarm(timeLimitInNanoseconds);
 		MatchFactory matchFactory = new MatchFactory(alarm, boardDisplay);
 
 		GameClock gameClock = new GameClock(alarm);
+		
+		List<Player> players = new ArrayList<Player>(playerClassNames.size());
+		for (String s : playerClassNames) {
+			players.add(new Player(s, gameClock));
+		}
 
-		Player[] players = new Player[] {
-			new Player(player1, gameClock),
-			new Player(player1, gameClock),
-			new Player(player2, gameClock),
-			new Player(player2, gameClock)
-		};
+		ContestantManager contestantManager = new ContestantManager(players, gamesPerMatchup);
 
-		int totalMatches = 2;
-		ContestantManager contestantManager =  new ContestantManager(players, totalMatches);
+		//Printout of settings
+		System.out.println("\n=============SETTINGS===============");
+//		System.out.println("Output file      : " + (outputFile == null			? "None"     : outputFile));
+		System.out.println("TimeLimitPerTurn : " + (timeLimitInNanoseconds <= 0	? "None" : timeLimitInNanoseconds) + " nanoseconds");
+		System.out.println("GamesPerMatchup  : " + (gamesPerMatchup <= 0		? "Infinite" : gamesPerMatchup));
+//		System.out.println("RandomizedStates : " + (randomizedStates			? "True"     : "False"));
+//		System.out.println("Tournament       : " + (tourn						? "True"     : "False"));
+//		System.out.println("Transparencies   : " + (trans						? "True"     : "False"));
+		System.out.println("====================================");
+
+		System.out.println("<< The matchups >>");
+		System.out.println(contestantManager);
+
 		tournament = new Tournament(matchFactory, contestantManager);
 	}
 
@@ -96,11 +107,8 @@ public class Othello extends StaticScreenGame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		InputHandler handler = new InputHandler(new InputParser(args));
-		String p1 = handler.getPlayer1();
-		String p2 = handler.getPlayer2();
-		
-		Othello othello = new Othello(p1, p2);
+		InputHandler handler = new InputHandler(InputParser.createKeyValueStore(args));
+		Othello othello = new Othello(handler.getPlayers(), handler.getGamesPerMatchup(), handler.getTimeLimitPerTurn());
 		othello.run();
 	}
 }

@@ -72,8 +72,13 @@ public class Matchup {
 			return player2;
 		} else if (player2 == p) {
 			return player1;
-		} else {
+		} else {//Hopefully doesn't happen
 			return null;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "[" + player1.toString() + " VS " + player2.toString() + "]";
 	}
 }
