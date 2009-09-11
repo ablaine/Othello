@@ -8,14 +8,18 @@ Author: Andrew Blaine
 
 << Usage >>
 	java -jar Othello.jar [--help | -h] | [--version | -v]
-		| [--players <path.to.player> <path.to.player> | -p <path.to.player> <path.to.player>]
-		| [--player1 <path.to.player> | -p1 <path.to.player>]
-		| [--player2 <path.to.player> | -p2 <path.to.player>]
-		| [--directory <path.to.implementations> | -d <path.to.implementations>]
+		| [--players <path.to.player>*				| -p <path.to.player>* ]
+		| [--directory <path.to.implementations>	| -d <path.to.implementations> ]
+		| [--timeLimit <timeInNanoseconds>			| -t <timeInNanoseconds> ]
+		| [--games <gamesPerMatchup>				| -g <gamesPerMatchup> ]
+
+	Comments are signified by '//' (without the quotes) and hides all following arguments.
 
 << Examples >>
 	java -jar Othello.jar
 	java -jar Othello.jar --help
-	java -jar Othello.jar impl.ai.SlowRandomPlayer impl.ai.RandomPlayer
-	java -jar Othello.jar SlowRandomPlayer RandomPlayer -d impl.ai
-	java -jar Othello.jar -p1 impl.ai.SlowRandomPlayer
+	java -jar Othello.jar -p impl.ai.RandomPlayer
+	java -jar Othello.jar -p impl.ai.SlowRandomPlayer impl.ai.RandomPlayer
+	java -jar Othello.jar --players SlowRandomPlayer RandomPlayer -d impl.ai
+	java -jar Othello.jar -g 2 //This is ignored
+	java -jar Othello.jar -t 2s -p impl.ai.SlowRandomPlayer

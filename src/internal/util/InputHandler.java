@@ -1,5 +1,7 @@
 package internal.util;
 
+import api.util.UnitConversion;
+import api.util.UnitConversion.Unit;
 import impl.ai.RandomPlayer;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,15 +86,11 @@ public class InputHandler {
 		String error = "<ERROR> --timeLimit\n\t";
 		long result = 0;
 		if (parser.containsKey((Object[])TIME_LIMIT_FLAGS)) {
-			List<String> timeLimit = parser.get((Object[])TIME_LIMIT_FLAGS);
-			if (timeLimit.size() != 1) {
+			List<String> values = parser.get((Object[])TIME_LIMIT_FLAGS);
+			if (values.size() != 1) {
 				printUsageAndQuit(error + "Please pass only a single value.");
 			}
-			try {
-				result = Long.parseLong(timeLimit.get(0));
-			} catch (NumberFormatException e) {//TODO: Parse for more than nanoseconds.
-				printUsageAndQuit(error + "Please use digits only, specified in nanoseconds.");
-			}
+			result = parseValueInNanoseconds(values.get(0), error);
 			if (result < 0) {
 				printUsageAndQuit(error + "Please use non-negative number.");
 			}
@@ -100,8 +98,46 @@ public class InputHandler {
 		return result;
 	}
 
+	private long parseValueInNanoseconds(String timeAndUnit, String error) {
+		long result = 0;
+		String sUnit = timeAndUnit.substring(timeAndUnit.length() - 2);//Get last two char
+		String sTime = "";
+		Unit fromUnit = null;
+		Unit toUnit = Unit.NANOSECOND;
+		if (sUnit.equals("ns")) {
+			sTime = timeAndUnit.substring(0, timeAndUnit.length() - 2);//rm last two char
+			fromUnit = Unit.NANOSECOND;
+		} else if (sUnit.equals("mu")) {
+			sTime = timeAndUnit.substring(0, timeAndUnit.length() - 2);//rm last two char
+			fromUnit = Unit.MICROSECOND;
+		} else if (sUnit.equals("ms")) {
+			sTime = timeAndUnit.substring(0, timeAndUnit.length() - 2);//rm last two char
+			fromUnit = Unit.MILLISECOND;
+		} else if (sUnit.substring(sUnit.length() - 1).equals("s")) {
+			sTime = timeAndUnit.substring(0, timeAndUnit.length() - 1);//rm last char
+			fromUnit = Unit.SECOND;
+		} else {// Specify/use correct units
+			printUsageAndQuit(error + "Please specify what unit. For example, -t 5ms\n" +
+					"\tValid units are: seconds(s), milliseconds(ms), microseconds(mu) and nanoseconds(ns).");
+		}
+		try {
+			result = Long.parseLong(sTime);
+		} catch (NumberFormatException e) {
+			printUsageAndQuit(error + "Please format correctly. For example, -t 10mu");
+		}
+		return UnitConversion.convert(result, fromUnit, toUnit);
+	}
+
 	public String usage() {
-		return "";
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n<< Usage >>");
+		sb.append("java -jar Othello.jar [--help | -h] | [--version | -v]");
+		sb.append("\n\t| [--players <path.to.player>*           | -p <path.to.player>* ]");
+		sb.append("\n\t| [--directory <path.to.implementations> | -d <path.to.implementations> ]");
+		sb.append("\n\t| [--timeLimit <timeAndUnit>             | -t <timeAndUnit> ]");
+		sb.append("\n\t| [--games <gamesPerMatchup>             | -g <gamesPerMatchup> ]");
+		sb.append("\n\n\tComments are signified by '//' (without the quotes) and hides all following arguments.");
+		return sb.toString();
 	}
 
 	private void printUsageAndQuit(String errorMessage) {
@@ -110,7 +146,7 @@ public class InputHandler {
 	}
 
 	private void printUsageAndQuit() {
-		System.out.println(usage());
+		System.err.println(usage());
 		System.exit(0);
 	}
 

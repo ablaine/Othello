@@ -65,16 +65,16 @@ public class Othello extends StaticScreenGame {
 		ContestantManager contestantManager = new ContestantManager(players, gamesPerMatchup);
 
 		//Printout of settings
-		System.out.println("\n=============SETTINGS===============");
+		System.out.println("\n============SETTINGS==============");
 //		System.out.println("Output file      : " + (outputFile == null			? "None"     : outputFile));
-		System.out.println("TimeLimitPerTurn : " + (timeLimitInNanoseconds <= 0	? "None" : timeLimitInNanoseconds) + " nanoseconds");
+		System.out.println("TimeLimitPerTurn : " + (timeLimitInNanoseconds <= 0	? "None" : timeLimitInNanoseconds + "ns"));
 		System.out.println("GamesPerMatchup  : " + (gamesPerMatchup <= 0		? "Infinite" : gamesPerMatchup));
 //		System.out.println("RandomizedStates : " + (randomizedStates			? "True"     : "False"));
 //		System.out.println("Tournament       : " + (tourn						? "True"     : "False"));
 //		System.out.println("Transparencies   : " + (trans						? "True"     : "False"));
-		System.out.println("====================================");
+		System.out.println("==================================");
 
-		System.out.println("<< The matchups >>");
+		System.out.println("<< The matchup(s) >>");
 		System.out.println(contestantManager);
 
 		tournament = new Tournament(matchFactory, contestantManager);

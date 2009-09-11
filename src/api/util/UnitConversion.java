@@ -11,7 +11,7 @@ public class UnitConversion {
 	/**
 	 * Simple enum to represent a small set of units in time.
 	 */
-	public enum Unit { SECOND, MILLISECOND, MICROSECOND, NANOSECOND }
+	public enum Unit { SECOND/*s*/, MILLISECOND/*ms*/, MICROSECOND/*mu*/, NANOSECOND/*ns*/ }
 
 	/**
 	 * Simple unit converter. Moving from smaller units to larger units will
