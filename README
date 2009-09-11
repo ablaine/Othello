@@ -8,12 +8,16 @@ Author: Andrew Blaine
 
 << Usage >>
 	java -jar Othello.jar [--help | -h] | [--version | -v]
+		| [--tournament								| -tourn ]
 		| [--players <path.to.player>*				| -p <path.to.player>* ]
 		| [--directory <path.to.implementations>	| -d <path.to.implementations> ]
 		| [--timeLimit <timeInNanoseconds>			| -t <timeInNanoseconds> ]
 		| [--games <gamesPerMatchup>				| -g <gamesPerMatchup> ]
 
-	Comments are signified by '//' (without the quotes) and hides all following arguments.
+	#NOTES#
+	  * Comments are signified by '//' (without the quotes) and hides all following arguments.
+	  * In tournament mode, --directory accepts multiple directory paths
+
 
 << Examples >>
 	java -jar Othello.jar

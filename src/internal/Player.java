@@ -16,7 +16,6 @@ import java.util.Random;
  * @author ablaine
  */
 public class Player {
-	private final static PlayerLogicFactory factory = new PlayerLogicFactory();
 	private int wins = 0;
 	private int ties = 0;
 	private int losses = 0;
@@ -37,7 +36,7 @@ public class Player {
 	}
 
 	public void init(State s) {
-		logic = factory.createPlayerLogic(logicClassName, this, s);
+		logic = PlayerLogicFactory.createPlayerLogic(logicClassName, this, s);
 		logic.init();
 	}
 

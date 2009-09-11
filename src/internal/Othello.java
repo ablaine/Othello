@@ -41,7 +41,7 @@ public class Othello extends StaticScreenGame {
 	private final View view;//TODO
 	private final Tournament tournament;
 
-	public Othello(List<String> playerClassNames, int gamesPerMatchup, long timeLimitInNanoseconds) {
+	public Othello(boolean tournamentMode, List<String> playerClassNames, int gamesPerMatchup, long timeLimitInNanoseconds) {
 		super(View.WORLD_WIDTH, View.WORLD_HEIGHT, false);
 		ResourceFactory.getFactory().loadResources(RSC_PATH, "resources.xml");
 		gameframe.setTitle("Othello");
@@ -63,16 +63,6 @@ public class Othello extends StaticScreenGame {
 		}
 
 		ContestantManager contestantManager = new ContestantManager(players, gamesPerMatchup);
-
-		//Printout of settings
-		System.out.println("\n============SETTINGS==============");
-//		System.out.println("Output file      : " + (outputFile == null			? "None"     : outputFile));
-		System.out.println("TimeLimitPerTurn : " + (timeLimitInNanoseconds <= 0	? "None" : timeLimitInNanoseconds + "ns"));
-		System.out.println("GamesPerMatchup  : " + (gamesPerMatchup <= 0		? "Infinite" : gamesPerMatchup));
-//		System.out.println("RandomizedStates : " + (randomizedStates			? "True"     : "False"));
-//		System.out.println("Tournament       : " + (tourn						? "True"     : "False"));
-//		System.out.println("Transparencies   : " + (trans						? "True"     : "False"));
-		System.out.println("==================================");
 
 		System.out.println("<< The matchup(s) >>");
 		System.out.println(contestantManager);
@@ -108,7 +98,23 @@ public class Othello extends StaticScreenGame {
 	 */
 	public static void main(String[] args) {
 		InputHandler handler = new InputHandler(InputParser.createKeyValueStore(args));
-		Othello othello = new Othello(handler.getPlayers(), handler.getGamesPerMatchup(), handler.getTimeLimitPerTurn());
+		
+		boolean tourn = handler.isTournamentMode();
+		List<String> players = handler.getPlayers();
+		int gamesPerMatchup = handler.getGamesPerMatchup();
+		long timeLimitInNanoseconds = handler.getTimeLimitPerTurn();
+
+		//Printout of settings
+		System.out.println("\n============SETTINGS==============");
+		System.out.println("Tournament       : " + (tourn						? "True"	 : "False"));
+		System.out.println("GamesPerMatchup  : " + (gamesPerMatchup <= 0		? "Infinite" : gamesPerMatchup));
+		System.out.println("TimeLimitPerTurn : " + (timeLimitInNanoseconds <= 0	? "None"	 : timeLimitInNanoseconds + "ns"));
+//		System.out.println("Logging          : " + (outputFile == null			? "None"	 : outputFile));
+//		System.out.println("RandomizedStates : " + (randomizedStates			? "True"	 : "False"));
+//		System.out.println("Transparencies   : " + (trans						? "True"	 : "False"));
+		System.out.println(  "==================================");
+
+		Othello othello = new Othello(tourn, players, gamesPerMatchup, timeLimitInNanoseconds);
 		othello.run();
 	}
 }

@@ -3,6 +3,7 @@ package internal.util;
 import api.util.UnitConversion;
 import api.util.UnitConversion.Unit;
 import impl.ai.RandomPlayer;
+import internal.PlayerLogicFactory;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,10 @@ public class InputHandler {
 	public static final String[] DIRECTORY_FLAGS = { "-d", "-dir", "-directory" };
 	public static final String[] NUMBER_OF_GAMES_FLAGS = { "-g", "--games" };
 	public static final String[] TIME_LIMIT_FLAGS = { "-t", "--timeLimit" };
+	public static final String[] TOURNAMENT_FLAGS = { "-tourn", "--tournament" };
+
 	public static final String DEFAULT_PLAYER = RandomPlayer.class.getCanonicalName();
+	public static final String DEFAULT_AI_PACKAGE = "impl.ai";
 
 	private final InputParser parser;
 
@@ -24,12 +28,27 @@ public class InputHandler {
 		handleQuickExits();
 	}
 
+	public boolean isTournamentMode() {
+		return parser.containsKey((Object[])TOURNAMENT_FLAGS);
+	}
+
 	public List<String> getPlayers() {
-		List<String> players = new LinkedList<String>();
-		if (parser.containsKey((Object[])PLAYER_FLAGS)) {
-			players = parser.get((Object[])PLAYER_FLAGS);
+		List<String> result = new LinkedList<String>();
+		if (isTournamentMode()) {
+			List<String> directories = getDirectories();
+			if (directories.size() == 0) {//Lets get *some* variety here
+				directories.add(DEFAULT_AI_PACKAGE);
+			}
+			for (String dir : directories) {
+				result.addAll(PlayerLogicFactory.findPlayerLogicClassNames(dir));
+			}
+		} else {
+			List<String> players = new LinkedList<String>();
+			if (parser.containsKey((Object[]) PLAYER_FLAGS)) {
+				players = parser.get((Object[]) PLAYER_FLAGS);
+			}
+			result = prependDirectory(players);
 		}
-		List<String> result = prependDirectory(players);
 		while (result.size() < 2) {
 			result.add(DEFAULT_PLAYER);
 		}
@@ -69,6 +88,10 @@ public class InputHandler {
 		return result;
 	}
 
+	/**
+	 * Will return null if the flag is not found.
+	 * @return
+	 */
 	public String getDirectory() {
 		String error = "<ERROR> --directory\n\t";
 		String result = null;
@@ -78,6 +101,14 @@ public class InputHandler {
 				printUsageAndQuit(error + "Please pass only a single directory.");
 			}
 			result = directory.get(0);
+		}
+		return result;
+	}
+
+	public List<String> getDirectories() {
+		List<String> result = new LinkedList<String>();
+		if (parser.containsKey((Object[])DIRECTORY_FLAGS)) {
+			result = parser.get((Object[])DIRECTORY_FLAGS);
 		}
 		return result;
 	}
