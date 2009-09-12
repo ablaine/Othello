@@ -62,12 +62,12 @@ public class Othello extends StaticScreenGame {
 			players.add(new Player(s, gameClock));
 		}
 
-		ContestantManager contestantManager = new ContestantManager(players, gamesPerMatchup);
+		MatchupManager matchupManager = new MatchupManager(players, gamesPerMatchup);
 
 		System.out.println("<< The matchup(s) >>");
-		System.out.println(contestantManager);
+		System.out.println(matchupManager);
 
-		tournament = new Tournament(matchFactory, contestantManager);
+		tournament = new Tournament(matchFactory, matchupManager);
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class Othello extends StaticScreenGame {
 		List<String> players = handler.getPlayers();
 		int gamesPerMatchup = handler.getGamesPerMatchup();
 		long timeLimitInNanoseconds = handler.getTimeLimitPerTurn();
-
+		
 		//Printout of settings
 		System.out.println("\n============SETTINGS==============");
 		System.out.println("Tournament       : " + (tourn						? "True"	 : "False"));

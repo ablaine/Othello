@@ -3,11 +3,11 @@ package internal;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ContestantManager {
+public class MatchupManager {
 	private final List<Matchup> matchups;
 	private int matchupIndex = 0; //Always points at the current matchup in play
 
-	public ContestantManager(List<Player> players, int totalMatches) {
+	public MatchupManager(List<Player> players, int totalMatches) {
 		matchups = new LinkedList<Matchup>();
 		for (int i = 0; i < players.size(); i++) {
 			Player p1 = players.get(i);

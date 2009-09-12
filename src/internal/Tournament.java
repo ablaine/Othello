@@ -13,14 +13,14 @@ public class Tournament implements GameOverObserver {
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 	
 	private final MatchFactory matchFactory;
-	private final ContestantManager contestantManager;
+	private final MatchupManager matchupManager;
 	
 	private Match match;
 
-	public Tournament(MatchFactory matchFactory, ContestantManager contestantManager) {
+	public Tournament(MatchFactory matchFactory, MatchupManager matchupManager) {
 		this.matchFactory = matchFactory;
-		this.contestantManager = contestantManager;
-		if (!contestantManager.hasMoreMatchups()) {
+		this.matchupManager = matchupManager;
+		if (!matchupManager.hasMoreMatchups()) {
 			// Well, this is no fun...
 			stateManager.setCurState(GameState.TOURNAMENT_OVER);
 		}
@@ -30,7 +30,7 @@ public class Tournament implements GameOverObserver {
 		switch(stateManager.getCurState()) {
 			case INIT:
 				if (stateManager.isStateChange()) {
-					Matchup matchup = contestantManager.getNextMatchup();
+					Matchup matchup = matchupManager.getNextMatchup();
 					match = matchFactory.createMatch(matchup);
 					match.registerObserver(this);
 					stateManager.setCurState(GameState.MATCH_IN_SESSION);
@@ -41,7 +41,7 @@ public class Tournament implements GameOverObserver {
 				break;
 			case MATCH_OVER:
 				if (stateManager.isStateChange()) {
-					if (contestantManager.hasMoreMatchups()) {
+					if (matchupManager.hasMoreMatchups()) {
 						stateManager.setCurState(GameState.INIT);
 					} else {
 						stateManager.setCurState(GameState.TOURNAMENT_OVER);
