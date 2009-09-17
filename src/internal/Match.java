@@ -5,6 +5,7 @@ import api.State;
 import api.struct.MoveList;
 import api.struct.Board;
 import api.struct.Move;
+import internal.timer.Timer;
 import internal.util.Observable;
 import internal.util.StateManager;
 import jig.engine.GameClock.Alarm;
@@ -21,16 +22,16 @@ public class Match extends Observable {
 
 	private final Matchup matchup;
 	private final Board board;
-	private final Alarm alarm;
+	private final Timer timer;
 	private final Player dark;//TODO: Avoid holding these two vars in favor of 'matchup' ?
 	private final Player light;
 	private Player curPlayer;
 	private AIThread aiThread;
 
-	public Match(Matchup matchup, Board board, Alarm alarm) {
+	public Match(Matchup matchup, Board board, Timer timer) {
 		this.matchup = matchup;
 		this.board = board;
-		this.alarm = alarm;
+		this.timer = timer;
 		dark = matchup.getFirst();
 		light = matchup.getSecond();
 		curPlayer = dark;
@@ -47,7 +48,7 @@ public class Match extends Observable {
 			MoveList validMoves = GameLogic.getValidMoves(board, curPlayer.getState());
 			if (validMoves.size() > 0) { //Make your move.
 				aiThread = new AIThread(curPlayer, board.clone(), validMoves.toPoints());
-				alarm.reset();
+				timer.reset();
 				aiThread.start();
 				return;
 			} else {
@@ -56,7 +57,7 @@ public class Match extends Observable {
 				if (validMoves.size() > 0) { //Other player goes again.
 					System.out.println(Othello.SYSTEM + curPlayer.getNicknameAndState() + " gets to move again!");
 					aiThread = new AIThread(curPlayer, board.clone(), validMoves.toPoints());
-					alarm.reset();
+					timer.reset();
 					aiThread.start();
 					return;
 				} else { //GameOver
@@ -75,7 +76,7 @@ public class Match extends Observable {
 				gameOver(matchup.otherPlayer(curPlayer));
 				return;
 			}
-		} else if (alarm.expired()) {
+		} else if (timer.expired()) {
 			System.out.println(Othello.SYSTEM + curPlayer.getNicknameAndState() + " has just run out of time.");
 			gameOver(matchup.otherPlayer(curPlayer));
 			return;

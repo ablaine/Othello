@@ -17,6 +17,9 @@ import impl.ai.RandomPlayer;
 import internal.util.InputHandler;
 import api.util.UnitConversion;
 import api.util.UnitConversion.Unit;
+import internal.timer.Timer;
+import internal.timer.InfiniteTimer;
+import internal.timer.TimedTimer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,10 +55,16 @@ public class Othello extends StaticScreenGame {
 		BoardDisplay boardDisplay = new BoardDisplay(tileLayer);
 		view = new View(boardDisplay);
 
-		Alarm alarm = theClock.setAlarm(timeLimitInNanoseconds);
-		MatchFactory matchFactory = new MatchFactory(alarm, boardDisplay);
+		Timer timer = null;
+		if (timeLimitInNanoseconds == 0) {
+			timer = new InfiniteTimer(theClock.setAlarm(Long.MAX_VALUE));
+		} else {
+			timer = new TimedTimer(theClock.setAlarm(timeLimitInNanoseconds));
+		}
+		MatchFactory matchFactory = new MatchFactory(timer, boardDisplay);
 
-		GameClock gameClock = new GameClock(alarm);
+		//Wrap the timer in a "GameClock" before we give its access to the players
+		GameClock gameClock = new GameClock(timer);
 		
 		List<Player> players = new ArrayList<Player>(playerClassNames.size());
 		for (String s : playerClassNames) {
