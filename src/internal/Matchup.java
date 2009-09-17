@@ -18,7 +18,7 @@ public class Matchup {
 		this.player1 = player1;
 		this.player2 = player2;
 		//Fill the list with unplayed match state's.
-		winners = new ArrayList(Arrays.asList(new MatchStatus[totalMatches]));
+		winners = new ArrayList<MatchStatus>(Arrays.asList(new MatchStatus[totalMatches]));
 	}
 
 	public boolean hasMoreMatches() {
