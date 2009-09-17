@@ -20,7 +20,7 @@ public class AIThread extends Thread {
 		this.player = player;
 		this.board = board;
 		this.validMoves = validMoves;
-		this.setName("AIThread - " + player.getFullName());
+		this.setName("AIThread - " + player.getFullName() + "(" + player.getState() + ")");
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class AIThread extends Thread {
 			return;
 		}
 		if (m == null) {
-			System.err.println(player.getFullName() + " has no moves available and was asked to make a move!");
+			System.err.println(player.getFullName() + "(" + player.getState() + ") has no moves available and was asked to make a move!");
 			System.exit(1);//Bug checking
 		} else {
 			setMove(m);
