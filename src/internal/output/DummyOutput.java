@@ -10,7 +10,7 @@ import internal.Tournament;
 
 /**
  * This is a noop implementation serving as the base class for the IOutput
- * decorator.
+ * decorator. By default, we do not output anything.
  *
  * @author Andrew Blaine
  */

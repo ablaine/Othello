@@ -17,13 +17,13 @@ import java.util.List;
  *
  * @author Andrew Blaine
  */
-public class ConsoleOutput extends OutputDecorator {
+public class ConsoleDecorator extends OutputDecorator {
 	private static String OPEN = "<< ";
 	private static String CLOSE = " >>";
 
 	private final boolean printBoard;
 	
-	public ConsoleOutput(IOutput output, boolean printBoard) {
+	public ConsoleDecorator(IOutput output, boolean printBoard) {
 		super(output);
 		this.printBoard = printBoard;
 	}

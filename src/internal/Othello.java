@@ -56,7 +56,7 @@ public class Othello extends StaticScreenGame {
 
 		IOutput output = new DummyOutput();
 		boolean printBoard = false;
-		output = new ConsoleOutput(output, printBoard);
+		output = new ConsoleDecorator(output, printBoard);
 //		output = new GUIOutput(output);
 //		output = new LoggerOutput(output, "out.log");
 
