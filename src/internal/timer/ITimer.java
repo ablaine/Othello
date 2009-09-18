@@ -6,7 +6,7 @@ package internal.timer;
  *
  * @author Andrew Blaine
  */
-public interface Timer {
+public interface ITimer {
 
 	public boolean isActive();
 

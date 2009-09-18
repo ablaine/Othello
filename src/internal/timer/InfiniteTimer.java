@@ -8,7 +8,7 @@ import jig.engine.GameClock.Alarm;
  *
  * @author Andrew Blaine
  */
-public class InfiniteTimer implements Timer {
+public class InfiniteTimer implements ITimer {
 	private final Alarm alarm;
 
 	/** The alarm is only for keeping track of elapsed time. */

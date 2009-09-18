@@ -1,14 +1,14 @@
 package internal;
 
 import internal.output.IOutput;
-import internal.util.GameOverObserver;
+import internal.util.IGameOverObserver;
 import internal.util.StateManager;
 
 /**
  *
  * @author Andrew Blaine
  */
-public class Tournament implements GameOverObserver {
+public class Tournament implements IGameOverObserver {
 	public enum GameState { INIT, MATCH_IN_SESSION, MATCH_OVER, TOURNAMENT_OVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 

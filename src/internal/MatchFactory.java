@@ -2,7 +2,7 @@ package internal;
 
 import api.struct.Board;
 import internal.output.IOutput;
-import internal.timer.Timer;
+import internal.timer.ITimer;
 import internal.view.BoardDisplay;
 import jig.engine.GameClock.Alarm;
 
@@ -12,10 +12,10 @@ import jig.engine.GameClock.Alarm;
  */
 public class MatchFactory {
 	private final IOutput output;
-	private final Timer timer;
+	private final ITimer timer;
 	private final BoardDisplay boardDisplay;
 
-	public MatchFactory(IOutput output, Timer timer, BoardDisplay boardDisplay) {
+	public MatchFactory(IOutput output, ITimer timer, BoardDisplay boardDisplay) {
 		this.output = output;
 		this.timer = timer;
 		this.boardDisplay = boardDisplay;

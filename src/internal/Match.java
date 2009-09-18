@@ -7,7 +7,7 @@ import api.struct.Board;
 import api.struct.FlipList;
 import api.struct.Move;
 import internal.output.IOutput;
-import internal.timer.Timer;
+import internal.timer.ITimer;
 import internal.util.Observable;
 import internal.util.StateManager;
 
@@ -24,13 +24,13 @@ public class Match extends Observable {
 	private final Matchup matchup;
 	private final Board board;
 	private final IOutput output;
-	private final Timer timer;
+	private final ITimer timer;
 	private final Player dark;//TODO: Avoid holding these two vars in favor of 'matchup' ?
 	private final Player light;
 	private Player curPlayer;
 	private AIThread aiThread;
 
-	public Match(Matchup matchup, Board board, IOutput output, Timer timer) {
+	public Match(Matchup matchup, Board board, IOutput output, ITimer timer) {
 		this.matchup = matchup;
 		this.board = board;
 		this.output = output;

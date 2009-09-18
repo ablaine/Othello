@@ -47,7 +47,7 @@ public class Othello extends StaticScreenGame {
 		BoardDisplay boardDisplay = new BoardDisplay(tileLayer);
 		view = new View(boardDisplay);
 
-		Timer timer = null;
+		ITimer timer = null;
 		if (timeLimitInNanoseconds == 0) {
 			timer = new InfiniteTimer(theClock.setAlarm(Long.MAX_VALUE));
 		} else {

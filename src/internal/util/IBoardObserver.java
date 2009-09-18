@@ -4,8 +4,8 @@ import api.struct.FlipList;
 
 /**
  *
- * @author ablaine
+ * @author Andrew Blaine
  */
-public interface BoardObserver {
+public interface IBoardObserver {
 	void updateBoard(FlipList flipList);
 }

@@ -6,13 +6,13 @@ import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.physics.vpe.VanillaAARectangle;
 import api.struct.Board;
 import api.struct.FlipList;
-import internal.util.BoardObserver;
+import internal.util.IBoardObserver;
 
 /**
  *
  * @author ablaine
  */
-public class BoardDisplay implements BoardObserver {
+public class BoardDisplay implements IBoardObserver {
 	private final AbstractBodyLayer<VanillaAARectangle> tileLayer;
 	private Tile[][] board;
 

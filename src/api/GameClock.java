@@ -3,7 +3,7 @@ package api;
 import api.util.UnitConversion;
 import api.util.UnitConversion.Unit;
 import internal.timer.TimedTimer;
-import internal.timer.Timer;
+import internal.timer.ITimer;
 import jig.engine.GameClock.Alarm;
 
 /**
@@ -13,14 +13,14 @@ import jig.engine.GameClock.Alarm;
  * @author Andrew Blaine
  */
 public class GameClock {
-	private Timer timer;
+	private ITimer timer;
 
 	/**
 	 * Constructs a game clock using the given alarm.
 	 * 
 	 * @param alarm The alarm to use.
 	 */
-	public GameClock(Timer timer) {
+	public GameClock(ITimer timer) {
 		this.timer = timer;
 	}
 

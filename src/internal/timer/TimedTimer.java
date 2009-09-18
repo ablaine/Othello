@@ -8,7 +8,7 @@ import jig.engine.GameClock.Alarm;
  * 
  * @author Andrew Blaine
  */
-public class TimedTimer implements Timer {
+public class TimedTimer implements ITimer {
 	private final Alarm alarm;
 
 	public TimedTimer(Alarm alarm) {
