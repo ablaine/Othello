@@ -38,7 +38,8 @@ public class AIThread extends Thread {
 			return;
 		}
 		if (m == null) {
-			System.err.println(player.getFullName() + "(" + player.getState() + ") has no moves available and was asked to make a move!");
+			System.err.println(player.getFullName() + "(" + player.getState() +
+					") has no moves available and was asked to make a move!");
 			System.exit(1);//Bug checking
 		} else {
 			setMove(m);

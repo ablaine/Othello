@@ -4,11 +4,12 @@ import api.GameLogic;
 import api.State;
 import api.struct.MoveList;
 import api.struct.Board;
+import api.struct.FlipList;
 import api.struct.Move;
+import internal.output.IOutput;
 import internal.timer.Timer;
 import internal.util.Observable;
 import internal.util.StateManager;
-import jig.engine.GameClock.Alarm;
 
 /**
  * Handles the details for playing two players against each other in a game of
@@ -17,20 +18,22 @@ import jig.engine.GameClock.Alarm;
  * @author Andrew Blaine
  */
 public class Match extends Observable {
-	private enum GameState { INIT, PLAYING, GAME_OVER }
+	public enum GameState { INIT, PLAYING, GAME_OVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 
 	private final Matchup matchup;
 	private final Board board;
+	private final IOutput output;
 	private final Timer timer;
 	private final Player dark;//TODO: Avoid holding these two vars in favor of 'matchup' ?
 	private final Player light;
 	private Player curPlayer;
 	private AIThread aiThread;
 
-	public Match(Matchup matchup, Board board, Timer timer) {
+	public Match(Matchup matchup, Board board, IOutput output, Timer timer) {
 		this.matchup = matchup;
 		this.board = board;
+		this.output = output;
 		this.timer = timer;
 		dark = matchup.getFirst();
 		light = matchup.getSecond();
@@ -55,7 +58,7 @@ public class Match extends Observable {
 				nextPlayer();
 				validMoves = GameLogic.getValidMoves(board, curPlayer.getState());
 				if (validMoves.size() > 0) { //Other player goes again.
-					System.out.println(Othello.SYSTEM + curPlayer.getNicknameAndState() + " gets to move again!");
+					output.playerGetsToMoveAgain(curPlayer);
 					aiThread = new AIThread(curPlayer, board.clone(), validMoves.toPoints());
 					timer.reset();
 					aiThread.start();
@@ -69,7 +72,10 @@ public class Match extends Observable {
 		if (aiThread.isReady()) {
 			Move move = aiThread.getMove();
 			if (move != null) {
-				GameLogic.makeDestructiveMove(board, move);
+				FlipList flipList = GameLogic.getPointsFlipped(board, move);
+				GameLogic.makeDestructiveMove(board, flipList);
+				output.update(flipList, stateManager.getCurState());
+				output.update(board, stateManager.getCurState());
 				nextPlayer();
 				stateManager.setCurState(GameState.PLAYING);
 			} else { // Forfeit turn due to invalid move.
@@ -77,7 +83,7 @@ public class Match extends Observable {
 				return;
 			}
 		} else if (timer.expired()) {
-			System.out.println(Othello.SYSTEM + curPlayer.getNicknameAndState() + " has just run out of time.");
+			output.playerRanOutOfTime(curPlayer);
 			gameOver(matchup.otherPlayer(curPlayer));
 			return;
 		}
@@ -106,8 +112,7 @@ public class Match extends Observable {
 				if (stateManager.isStateChange()) {
 					dark.init(State.DARK);
 					light.init(State.LIGHT);
-					System.out.println(Othello.SYSTEM + dark.getNicknameAndState() + " vs " +
-														light.getNicknameAndState());
+					output.update(matchup, stateManager.getCurState());
 					stateManager.setCurState(GameState.PLAYING);
 				}
 				break;
@@ -116,13 +121,7 @@ public class Match extends Observable {
 				break;
 			case GAME_OVER:
 				if (stateManager.isStateChange()) {
-					System.out.print(Othello.SYSTEM + "Game is over... ");
-					MatchStatus matchStatus = matchup.getPreviousMatchState();
-					if (matchStatus.getState() == MatchStatus.State.TIED) {
-						System.out.println("it was a tie!");
-					} else if (matchStatus.getState() == MatchStatus.State.WINNER) {
-						System.out.println(matchStatus.getWinner().getNicknameAndState() + " is the winner!");
-					}
+					output.update(matchup, stateManager.getCurState());
 					notifyGameOverObservers();
 				}
 				break;

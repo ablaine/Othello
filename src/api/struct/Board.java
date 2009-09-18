@@ -138,10 +138,10 @@ public final class Board extends Observable implements Cloneable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("  0 1 2 3 4 5 6 7 \n");
+		sb.append("  " + "  0 1 2 3 4 5 6 7 \n");
 
 		for (int x = 0; x < SIZE; x++) {
-			sb.append((x) + " ");
+			sb.append("  " + (x) + " ");
 			for (State s : grid[x]) {
 				char c;
 				switch (s) {

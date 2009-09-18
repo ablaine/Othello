@@ -4,10 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MatchupManager {
+	private final List<Player> players;
 	private final List<Matchup> matchups;
 	private int matchupIndex = 0; //Always points at the current matchup in play
 
-	public MatchupManager(List<Player> players, int totalMatches) {
+	public MatchupManager(final List<Player> players, final int totalMatches) {
+		this.players = players;
 		matchups = new LinkedList<Matchup>();
 		for (int i = 0; i < players.size(); i++) {
 			Player p1 = players.get(i);
@@ -38,11 +40,19 @@ public class MatchupManager {
 		return matchup;
 	}
 
+	public List<Matchup> getAllMatchups() {
+		return matchups;
+	}
+
+	public List<Player> getAllPlayers() {
+		return players;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (Matchup m : matchups) {
-			sb.append("\t" + m.toString() + "\n");
+		for (int i = 0; i < matchups.size(); i++) {
+			sb.append("\t#" + (i + 1) + " " + matchups.get(i).toString() + "\n");
 		}
 		return sb.toString();
 	}

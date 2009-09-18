@@ -1,31 +1,34 @@
 package internal;
 
+import internal.output.IOutput;
 import internal.util.GameOverObserver;
 import internal.util.StateManager;
-import java.util.List;
 
 /**
  *
  * @author Andrew Blaine
  */
 public class Tournament implements GameOverObserver {
-	private enum GameState { INIT, MATCH_IN_SESSION, MATCH_OVER, TOURNAMENT_OVER }
+	public enum GameState { INIT, MATCH_IN_SESSION, MATCH_OVER, TOURNAMENT_OVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
-	
+
+	private final IOutput output;
 	private final MatchFactory matchFactory;
 	private final MatchupManager matchupManager;
-	
+
 	private Match match;
 
-	public Tournament(MatchFactory matchFactory, MatchupManager matchupManager) {
+	public Tournament(IOutput output, MatchFactory matchFactory, MatchupManager matchupManager) {
+		this.output = output;
 		this.matchFactory = matchFactory;
 		this.matchupManager = matchupManager;
+		output.update(matchupManager, stateManager.getCurState());
 		if (!matchupManager.hasMoreMatchups()) {
 			// Well, this is no fun...
 			stateManager.setCurState(GameState.TOURNAMENT_OVER);
 		}
 	}
-	
+
 	public void update(final long deltaMs) {
 		switch(stateManager.getCurState()) {
 			case INIT:
@@ -48,10 +51,11 @@ public class Tournament implements GameOverObserver {
 					}
 				}
 				break;
-			case TOURNAMENT_OVER://TODO: Print results
-				System.out.println(Othello.SYSTEM + "Tournement has ended.");
-				System.exit(0);
-				break;
+			case TOURNAMENT_OVER:
+				if (stateManager.isStateChange()) {
+					output.update(matchupManager, stateManager.getCurState());
+					System.exit(0);
+				}
 		}
 	}
 

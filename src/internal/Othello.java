@@ -2,7 +2,6 @@ package internal;
 
 import api.GameClock;
 import internal.util.InputParser;
-import api.GameLogic;
 import jig.engine.RenderingContext;
 import jig.engine.ResourceFactory;
 import jig.engine.hli.StaticScreenGame;
@@ -12,18 +11,11 @@ import jig.engine.physics.vpe.VanillaAARectangle;
 import internal.util.StateManager;
 import internal.view.BoardDisplay;
 import internal.view.View;
-import api.struct.Board;
-import impl.ai.RandomPlayer;
 import internal.util.InputHandler;
-import api.util.UnitConversion;
-import api.util.UnitConversion.Unit;
-import internal.timer.Timer;
-import internal.timer.InfiniteTimer;
-import internal.timer.TimedTimer;
+import internal.output.*;
+import internal.timer.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import jig.engine.GameClock.Alarm;
 
 /**
  *
@@ -61,7 +53,14 @@ public class Othello extends StaticScreenGame {
 		} else {
 			timer = new TimedTimer(theClock.setAlarm(timeLimitInNanoseconds));
 		}
-		MatchFactory matchFactory = new MatchFactory(timer, boardDisplay);
+
+		IOutput output = new DummyOutput();
+		boolean printBoard = false;
+		output = new ConsoleOutput(output, printBoard);
+//		output = new GUIOutput(output);
+//		output = new LoggerOutput(output, "out.log");
+
+		MatchFactory matchFactory = new MatchFactory(output, timer, boardDisplay);
 
 		//Wrap the timer in a "GameClock" before we give its access to the players
 		GameClock gameClock = new GameClock(timer);
@@ -73,10 +72,7 @@ public class Othello extends StaticScreenGame {
 
 		MatchupManager matchupManager = new MatchupManager(players, gamesPerMatchup);
 
-		System.out.println("<< The matchup(s) >>");
-		System.out.println(matchupManager);
-
-		tournament = new Tournament(matchFactory, matchupManager);
+		tournament = new Tournament(output, matchFactory, matchupManager);
 	}
 
 	@Override

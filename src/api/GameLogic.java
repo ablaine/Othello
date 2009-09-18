@@ -23,11 +23,25 @@ public class GameLogic {
 	 *
 	 * @param board The board to update.
 	 * @param move The move to apply.
-	 * @return the new board after having applied the move
+	 * @return the new board after having applied the move.
 	 */
 	public static Board makeHypotheticalMove(Board board, Move move) {
 		Board clone = board.clone();
 		makeDestructiveMove(clone, move);
+		return clone;
+	}
+
+	/**
+	 * Applies the flipList to a clone of the input board and returns the clone.
+	 * This will leave the passed in board unchanged.
+	 * 
+	 * @param board The board to update.
+	 * @param flipList The flipList to apply.
+	 * @return the new board after having applied the flipList.
+	 */
+	public static Board makeHypotheticalMove(Board board, FlipList flipList) {
+		Board clone = board.clone();
+		makeDestructiveMove(clone, flipList);
 		return clone;
 	}
 
@@ -40,7 +54,30 @@ public class GameLogic {
 	 * @param move The move to apply.
 	 */
 	public static void makeDestructiveMove(Board board, Move move) {
-		board.modify(new Helper(board, move).getFlipped());
+		makeDestructiveMove(board, getPointsFlipped(board, move));
+	}
+
+	/**
+	 * Destructively modifies the input board to reflect the changes of the
+	 * flipList being applied to the passed in board.
+	 * 
+	 * @param board The board to update.
+	 * @param flipList The flipList to apply.
+	 */
+	public static void makeDestructiveMove(Board board, FlipList flipList) {
+		board.modify(flipList);
+	}
+
+	/**
+	 * Returns a list of points that would be flipped if the input move is
+	 * applied to the board.
+	 * 
+	 * @param board The board to test on.
+	 * @param move The move to try.
+	 * @return the list of points that would be flipped.
+	 */
+	public static FlipList getPointsFlipped(Board board, Move move) {
+		return new Helper(board, move).getFlipped();
 	}
 
 	/**
@@ -78,7 +115,8 @@ public class GameLogic {
 
 /**
  * A helper class to test moves against boards. Using a few unchanging global
- * variables alleviates much of the overhead of passing these values around.
+ * variables alleviates much of the overhead of passing these values from method
+ * to method.
  * 
  * @author Andrew Blaine
  */

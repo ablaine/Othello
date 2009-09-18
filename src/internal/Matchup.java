@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  *
- * @author ablaine
+ * @author Andrew Blaine
  */
 public class Matchup {
 	private final Player player1;
@@ -73,6 +73,9 @@ public class Matchup {
 		} else if (player2 == p) {
 			return player1;
 		} else {//Hopefully doesn't happen
+			System.err.println("The matchup appears to be corrupted or an invalid player has been passed in...");
+			System.err.println("Found in the method: 'otherPlayer' with the input: '" + (p != null ? p.toString() : "null" + "'"));
+			System.exit(1);
 			return null;
 		}
 	}
