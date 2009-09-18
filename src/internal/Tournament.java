@@ -22,7 +22,7 @@ public class Tournament implements IGameOverObserver {
 		this.output = output;
 		this.matchFactory = matchFactory;
 		this.matchupManager = matchupManager;
-		output.update(matchupManager, stateManager.getCurState());
+		output.update( stateManager.getCurState(),matchupManager);
 		if (!matchupManager.hasMoreMatchups()) {
 			// Well, this is no fun...
 			stateManager.setCurState(GameState.TOURNAMENT_OVER);
@@ -36,6 +36,7 @@ public class Tournament implements IGameOverObserver {
 					Matchup matchup = matchupManager.getNextMatchup();
 					match = matchFactory.createMatch(matchup);
 					match.registerObserver(this);
+					output.update(stateManager.getCurState(), matchupManager);
 					stateManager.setCurState(GameState.MATCH_IN_SESSION);
 				}
 				break;
@@ -53,9 +54,10 @@ public class Tournament implements IGameOverObserver {
 				break;
 			case TOURNAMENT_OVER:
 				if (stateManager.isStateChange()) {
-					output.update(matchupManager, stateManager.getCurState());
+					output.update(stateManager.getCurState(), matchupManager);
 					System.exit(0);
 				}
+				break;
 		}
 	}
 

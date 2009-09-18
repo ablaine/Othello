@@ -2,6 +2,7 @@ package internal.output;
 
 import api.struct.Board;
 import api.struct.FlipList;
+import api.struct.Move;
 import internal.Match;
 import internal.MatchStatus;
 import internal.Matchup;
@@ -29,8 +30,8 @@ public class ConsoleDecorator extends OutputDecorator {
 	}
 
 	@Override
-	public void update(final MatchupManager matchupManager, final Tournament.GameState curState) {
-		output.update(matchupManager, curState);
+	public void update(final Tournament.GameState curState, final MatchupManager matchupManager) {
+		output.update(curState, matchupManager);
 		switch(curState) {
 			case INIT:
 				sayln("The matchup(s)");
@@ -41,8 +42,7 @@ public class ConsoleDecorator extends OutputDecorator {
 				sayln("Tournament is over!");
 				List<Player> players = new ArrayList<Player>(matchupManager.getAllPlayers());
 				Collections.sort(players, new Comparator<Player>() {
-					@Override
-					public int compare(Player p1, Player p2) {
+					@Override public int compare(Player p1, Player p2) {
 						return p2.getScore() - p1.getScore();
 					}
 				});
@@ -58,8 +58,8 @@ public class ConsoleDecorator extends OutputDecorator {
 	}
 
 	@Override
-	public void update(final Matchup matchup, final Match.GameState curState) {
-		output.update(matchup, curState);
+	public void update(final Match.GameState curState, final Matchup matchup) {
+		output.update(curState, matchup);
 		switch(curState) {
 			case INIT:
 				sayln(matchup.getFirst().getNicknameAndState() + " vs " +
@@ -79,15 +79,11 @@ public class ConsoleDecorator extends OutputDecorator {
 	}
 
 	@Override
-	public void update(final Board board, final Match.GameState curState) {
+	public void playerMadeMove(final Player player, final Move move, final FlipList flipList, final Board board) {
+		output.playerMadeMove(player, move, flipList, board);
 		if (printBoard) {
 			System.out.println(board.toString());
 		}
-	}
-
-	@Override
-	public void update(final FlipList flipList, final Match.GameState curState) {
-		//Do nothing
 	}
 
 	@Override

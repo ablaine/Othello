@@ -2,6 +2,7 @@ package internal.output;
 
 import api.struct.Board;
 import api.struct.FlipList;
+import api.struct.Move;
 import internal.Match;
 import internal.Matchup;
 import internal.MatchupManager;
@@ -17,22 +18,17 @@ import internal.Tournament;
 public class DummyOutput implements IOutput {
 
 	@Override
-	public void update(final MatchupManager matchupManager, final Tournament.GameState curState) {
+	public void update(final Tournament.GameState curState, final MatchupManager matchupManager) {
 		//Do nothing
 	}
 
 	@Override
-	public void update(final Matchup matchup, final Match.GameState curState) {
+	public void update(final Match.GameState curState, final Matchup matchup) {
 		//Do nothing
 	}
 
 	@Override
-	public void update(final Board board, final Match.GameState curState) {
-		//Do nothing
-	}
-
-	@Override
-	public void update(final FlipList flipList, final Match.GameState curState) {
+	public void playerMadeMove(final Player player, final Move move, final FlipList flipList, final Board board) {
 		//Do nothing
 	}
 

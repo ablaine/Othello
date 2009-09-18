@@ -74,8 +74,7 @@ public class Match extends Observable {
 			if (move != null) {
 				FlipList flipList = GameLogic.getPointsFlipped(board, move);
 				GameLogic.makeDestructiveMove(board, flipList);
-				output.update(flipList, stateManager.getCurState());
-				output.update(board, stateManager.getCurState());
+				output.playerMadeMove(curPlayer, move, flipList, board);
 				nextPlayer();
 				stateManager.setCurState(GameState.PLAYING);
 			} else { // Forfeit turn due to invalid move.
@@ -112,7 +111,7 @@ public class Match extends Observable {
 				if (stateManager.isStateChange()) {
 					dark.init(State.DARK);
 					light.init(State.LIGHT);
-					output.update(matchup, stateManager.getCurState());
+					output.update(stateManager.getCurState(), matchup);
 					stateManager.setCurState(GameState.PLAYING);
 				}
 				break;
@@ -121,7 +120,7 @@ public class Match extends Observable {
 				break;
 			case GAME_OVER:
 				if (stateManager.isStateChange()) {
-					output.update(matchup, stateManager.getCurState());
+					output.update(stateManager.getCurState(), matchup);
 					notifyGameOverObservers();
 				}
 				break;
