@@ -20,36 +20,27 @@ import java.util.List;
  *
  * @author Andrew Blaine
  */
-public class ConsoleDecorator extends OutputDecorator {
+public class ConsoleObserver implements IOutput {
 	private static String OPEN = "<< ";
 	private static String CLOSE = " >>";
 
 	private final boolean printBoard;
-	
-	public ConsoleDecorator(IOutput output, boolean printBoard) {
-		super(output);
+
+	public ConsoleObserver(boolean printBoard) {
 		this.printBoard = printBoard;
 	}
 
 	@Override
-	public void settings(final Settings s) {
-		output.settings(s);
-		//Printout of settings
+	public void settings(final Settings settings) {
 		System.out.println("\n============SETTINGS==============");
-		System.out.println("Tournament       : " + (s.isTournamentMode()			? "True"	 : "False"));
-		System.out.println("GamesPerMatchup  : " + (s.isInfiniteGamesPerMatchup()	? "Infinite" : s.getGamesPerMatchup()));
-		System.out.println("TimeLimitPerTurn : " + (s.isTimeLimited()				? "None"	 : s.getTimeLimit(Unit.NANOSECOND) + "ns"));
-		System.out.println("Logging          : " + (s.hasLogFile()					? "None"	 : s.getLogFileName()));
-//		System.out.println("RandomizedStates : " + (randomizedStates			? "True"	 : "False"));
-//		System.out.println("Transparencies   : " + (trans						? "True"	 : "False"));
+		System.out.println(settings.toString());
 		System.out.println("==================================\n");
 	}
 
 	@Override
 	public void update(final Tournament.GameState curState, final MatchupManager matchupManager) {
-		output.update(curState, matchupManager);
 		switch(curState) {
-			case INIT:
+			case TOURNAMENT_INIT:
 				sayln("The matchup(s)");
 				System.out.print(matchupManager.toString());
 				System.out.println();// One blank line
@@ -75,7 +66,6 @@ public class ConsoleDecorator extends OutputDecorator {
 
 	@Override
 	public void update(final Match.GameState curState, final Matchup matchup) {
-		output.update(curState, matchup);
 		switch(curState) {
 			case INIT:
 				sayln(matchup.getFirst().getNicknameAndState() + " vs " +
@@ -96,7 +86,6 @@ public class ConsoleDecorator extends OutputDecorator {
 
 	@Override
 	public void playerMadeMove(final Player player, final Move move, final FlipList flipList, final Board board) {
-		output.playerMadeMove(player, move, flipList, board);
 		if (printBoard) {
 			System.out.println(board.toString());
 		}
@@ -104,13 +93,11 @@ public class ConsoleDecorator extends OutputDecorator {
 
 	@Override
 	public void playerRanOutOfTime(final Player player) {
-		output.playerRanOutOfTime(player);
 		sayln(player.getNicknameAndState() + " has just run out of time.");
 	}
 
 	@Override
 	public void playerGetsToMoveAgain(final Player player) {
-		output.playerGetsToMoveAgain(player);
 		sayln(player.getNicknameAndState() + " gets to move again!");
 	}
 

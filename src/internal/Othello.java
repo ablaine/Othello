@@ -32,7 +32,7 @@ public class Othello extends StaticScreenGame {
 
 	private final AbstractBodyLayer<VanillaAARectangle> tileLayer;
 
-	private final View view;//TODO
+	private final View view;//TODO Refactor this into a GUIOutput class
 	private final Tournament tournament;
 
 	public Othello(Settings settings) {
@@ -53,12 +53,14 @@ public class Othello extends StaticScreenGame {
 			timer = new TimedTimer(theClock.setAlarm(settings.getTimeLimit(Unit.NANOSECOND)));
 		}
 
-		IOutput output = new DummyOutput();
 		boolean printBoard = false;
-		output = new ConsoleDecorator(output, printBoard);
-//		output = new GUIOutput(output);
-//		output = new LoggerOutput(output, "out.log");
-		output.settings(settings);
+
+		OutputManager output = new OutputManager();
+		output.registerObserver(new ConsoleObserver(printBoard));
+
+		//TODO implement these
+//		output.registerObserver(new GUIObserver());
+//		output.registerObserver(new LoggerOutput("out.log"));
 
 		MatchFactory matchFactory = new MatchFactory(output, timer, boardDisplay);
 
@@ -73,6 +75,9 @@ public class Othello extends StaticScreenGame {
 		MatchupManager matchupManager = new MatchupManager(players, settings.getGamesPerMatchup());
 
 		tournament = new Tournament(output, matchFactory, matchupManager);
+
+		// Display settings
+		output.settings(settings);
 	}
 
 	@Override

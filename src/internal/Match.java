@@ -21,9 +21,10 @@ public class Match extends Observable {
 	public enum GameState { INIT, PLAYING, GAME_OVER }
 	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
 
+	private final IOutput output;
+
 	private final Matchup matchup;
 	private final Board board;
-	private final IOutput output;
 	private final ITimer timer;
 	private final Player dark;//TODO: Avoid holding these two vars in favor of 'matchup' ?
 	private final Player light;
@@ -105,6 +106,7 @@ public class Match extends Observable {
 		stateManager.setCurState(GameState.GAME_OVER);
 	}
 
+	//TODO: Is the stateManager unnecessary..?
 	public void update(long deltaMs) {
 		switch (stateManager.getCurState()) {
 			case INIT:

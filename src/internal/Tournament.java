@@ -9,10 +9,11 @@ import internal.util.StateManager;
  * @author Andrew Blaine
  */
 public class Tournament implements IGameOverObserver {
-	public enum GameState { INIT, MATCH_IN_SESSION, MATCH_OVER, TOURNAMENT_OVER }
-	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.INIT);
+	public enum GameState { TOURNAMENT_INIT, MATCH_INIT, MATCH_IN_SESSION, MATCH_OVER, TOURNAMENT_OVER }
+	private final StateManager<GameState> stateManager = new StateManager<GameState>(GameState.TOURNAMENT_INIT);
 
 	private final IOutput output;
+	
 	private final MatchFactory matchFactory;
 	private final MatchupManager matchupManager;
 
@@ -22,7 +23,6 @@ public class Tournament implements IGameOverObserver {
 		this.output = output;
 		this.matchFactory = matchFactory;
 		this.matchupManager = matchupManager;
-		output.update( stateManager.getCurState(),matchupManager);
 		if (!matchupManager.hasMoreMatchups()) {
 			// Well, this is no fun...
 			stateManager.setCurState(GameState.TOURNAMENT_OVER);
@@ -31,12 +31,17 @@ public class Tournament implements IGameOverObserver {
 
 	public void update(final long deltaMs) {
 		switch(stateManager.getCurState()) {
-			case INIT:
+			case TOURNAMENT_INIT:
+				if (stateManager.isStateChange()) {
+					output.update(stateManager.getCurState(), matchupManager);
+					stateManager.setCurState(GameState.MATCH_INIT);
+				}
+				break;
+			case MATCH_INIT://Prepare a match
 				if (stateManager.isStateChange()) {
 					Matchup matchup = matchupManager.getNextMatchup();
 					match = matchFactory.createMatch(matchup);
 					match.registerObserver(this);
-					output.update(stateManager.getCurState(), matchupManager);
 					stateManager.setCurState(GameState.MATCH_IN_SESSION);
 				}
 				break;
@@ -46,7 +51,7 @@ public class Tournament implements IGameOverObserver {
 			case MATCH_OVER:
 				if (stateManager.isStateChange()) {
 					if (matchupManager.hasMoreMatchups()) {
-						stateManager.setCurState(GameState.INIT);
+						stateManager.setCurState(GameState.MATCH_INIT);
 					} else {
 						stateManager.setCurState(GameState.TOURNAMENT_OVER);
 					}

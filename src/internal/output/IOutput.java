@@ -21,16 +21,16 @@ public interface IOutput {
 	 * 
 	 * @param settings The settings for this series of matches.
 	 */
-	public void settings(final Settings settings);
+	void settings(final Settings settings);
 
 	/**
-	 * Reports once during <code>Tournament.GameState.INIT</code> and
+	 * Reports once during <code>Tournament.GameState.TOURNAMENT_INIT</code> and
 	 * <code>Tournament.GameState.TOURNAMENT_OVER</code>.
 	 * 
-	 * @param curState The current game state of the tournament loop. (Either INIT or TOURNAMENT_OVER)
+	 * @param curState The current game state of the tournament loop. (Either TOURNAMENT_INIT or TOURNAMENT_OVER)
 	 * @param matchupManager Access to the matchup manager if desired.
 	 */
-	public void update(final Tournament.GameState curState, final MatchupManager matchupManager);
+	void update(final Tournament.GameState curState, final MatchupManager matchupManager);
 
 	/**
 	 * Reports each time <code>Match.GameState.INIT</code> and
@@ -39,7 +39,7 @@ public interface IOutput {
 	 * @param curState The current game state of the match loop. (Either INIT or GAME_OVER)
 	 * @param matchup Access to the current matchup if desired.
 	 */
-	public void update(final Match.GameState curState, final Matchup matchup);
+	void update(final Match.GameState curState, final Matchup matchup);
 	
 	/**
 	 * Reports just after a player makes a move to the game board.
@@ -49,9 +49,9 @@ public interface IOutput {
 	 * @param flipList The list of points that were flipped.
 	 * @param board The board after the flipList has been applied.
 	 */
-	public void playerMadeMove(final Player player, final Move move, final FlipList flipList, final Board board);
+	void playerMadeMove(final Player player, final Move move, final FlipList flipList, final Board board);
 
 	//NOTE: Consider passing in a timer?
-	public void playerRanOutOfTime(final Player player);
-	public void playerGetsToMoveAgain(final Player player);
+	void playerRanOutOfTime(final Player player);
+	void playerGetsToMoveAgain(final Player player);
 }

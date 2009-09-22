@@ -30,6 +30,22 @@ public class Settings {
 		return new Settings(playerClassNames);
 	}
 
+	@Override
+	public String toString() {
+		String tourn = isTournamentMode()		   ? "True"			  : "False";
+		String games = isInfiniteGamesPerMatchup() ? "Infinite"		  : String.valueOf(getGamesPerMatchup());
+		String time  = isTimeLimited()			   ? "Infinite"		  : getTimeLimit(Unit.NANOSECOND) + "ns";
+		String log   = hasLogFile()				   ? getLogFileName() : "None";
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(  "Tournament       : " + tourn);
+		sb.append("\nGamesPerMatchup  : " + games);
+		sb.append("\nTimeLimitPerTurn : " + time);
+		sb.append("\nLogging          : " + log);
+
+		return sb.toString();
+	}
+
 /* SETTERS
  ******************************************************************************/
 	public void setTournamentMode(boolean tournamentMode) {
