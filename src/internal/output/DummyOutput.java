@@ -7,6 +7,7 @@ import internal.Match;
 import internal.Matchup;
 import internal.MatchupManager;
 import internal.Player;
+import internal.Settings;
 import internal.Tournament;
 
 /**
@@ -16,6 +17,11 @@ import internal.Tournament;
  * @author Andrew Blaine
  */
 public class DummyOutput implements IOutput {
+
+	@Override
+	public void settings(final Settings settings) {
+		//Do nothing
+	}
 
 	@Override
 	public void update(final Tournament.GameState curState, final MatchupManager matchupManager) {

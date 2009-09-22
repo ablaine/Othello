@@ -7,6 +7,7 @@ import internal.Match;
 import internal.Matchup;
 import internal.MatchupManager;
 import internal.Player;
+import internal.Settings;
 import internal.Tournament;
 
 /**
@@ -14,6 +15,13 @@ import internal.Tournament;
  * @author Andrew Blaine
  */
 public interface IOutput {
+
+	/**
+	 * Reports prior to starting up the tournament.
+	 * 
+	 * @param settings The settings for this series of matches.
+	 */
+	public void settings(final Settings settings);
 
 	/**
 	 * Reports once during <code>Tournament.GameState.INIT</code> and

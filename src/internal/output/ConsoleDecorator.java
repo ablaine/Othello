@@ -3,11 +3,13 @@ package internal.output;
 import api.struct.Board;
 import api.struct.FlipList;
 import api.struct.Move;
+import api.util.UnitConversion.Unit;
 import internal.Match;
 import internal.MatchStatus;
 import internal.Matchup;
 import internal.MatchupManager;
 import internal.Player;
+import internal.Settings;
 import internal.Tournament;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +29,20 @@ public class ConsoleDecorator extends OutputDecorator {
 	public ConsoleDecorator(IOutput output, boolean printBoard) {
 		super(output);
 		this.printBoard = printBoard;
+	}
+
+	@Override
+	public void settings(final Settings s) {
+		output.settings(s);
+		//Printout of settings
+		System.out.println("\n============SETTINGS==============");
+		System.out.println("Tournament       : " + (s.isTournamentMode()			? "True"	 : "False"));
+		System.out.println("GamesPerMatchup  : " + (s.isInfiniteGamesPerMatchup()	? "Infinite" : s.getGamesPerMatchup()));
+		System.out.println("TimeLimitPerTurn : " + (s.isTimeLimited()				? "None"	 : s.getTimeLimit(Unit.NANOSECOND) + "ns"));
+		System.out.println("Logging          : " + (s.hasLogFile()					? "None"	 : s.getLogFileName()));
+//		System.out.println("RandomizedStates : " + (randomizedStates			? "True"	 : "False"));
+//		System.out.println("Transparencies   : " + (trans						? "True"	 : "False"));
+		System.out.println("==================================\n");
 	}
 
 	@Override
