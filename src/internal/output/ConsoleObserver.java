@@ -65,7 +65,7 @@ public class ConsoleObserver implements IOutput {
 	}
 
 	@Override
-	public void update(final Match.GameState curState, final Matchup matchup) {
+	public void update(final Match.GameState curState, final Matchup matchup, final Board board) {
 		switch(curState) {
 			case INIT:
 				sayln(matchup.getFirst().getNicknameAndState() + " vs " +

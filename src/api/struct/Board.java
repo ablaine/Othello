@@ -1,7 +1,6 @@
 package api.struct;
 
 import api.State;
-import internal.util.Observable;
 import java.awt.Point;
 
 /**
@@ -9,7 +8,7 @@ import java.awt.Point;
  * 
  * @author Andrew Blaine
  */
-public final class Board extends Observable implements Cloneable {
+public final class Board implements Cloneable {
 	public static final int SIZE = 8;
 	private State[][] grid;
 
@@ -107,7 +106,6 @@ public final class Board extends Observable implements Cloneable {
 		for (Point p : flipList) {
 			grid[p.x][p.y] = flipList.getState();
 		}
-		notifyBoardObservers(flipList);
 	}
 
 	/**

@@ -106,14 +106,14 @@ public class Match extends Observable {
 		stateManager.setCurState(GameState.GAME_OVER);
 	}
 
-	//TODO: Is the stateManager unnecessary..?
+	//TODO: Is the stateManager still necessary..?
 	public void update(long deltaMs) {
 		switch (stateManager.getCurState()) {
 			case INIT:
 				if (stateManager.isStateChange()) {
 					dark.init(State.DARK);
 					light.init(State.LIGHT);
-					output.update(stateManager.getCurState(), matchup);
+					output.update(stateManager.getCurState(), matchup, board);
 					stateManager.setCurState(GameState.PLAYING);
 				}
 				break;
@@ -122,7 +122,7 @@ public class Match extends Observable {
 				break;
 			case GAME_OVER:
 				if (stateManager.isStateChange()) {
-					output.update(stateManager.getCurState(), matchup);
+					output.update(stateManager.getCurState(), matchup, board);
 					notifyGameOverObservers();
 				}
 				break;

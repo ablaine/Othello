@@ -1,4 +1,4 @@
-package internal.view;
+package internal.output;
 
 import jig.engine.physics.vpe.VanillaAARectangle;
 import jig.engine.util.Vector2D;
@@ -33,8 +33,8 @@ public class Tile extends VanillaAARectangle {
 		this.y = y;
 		setState(s);
 		setPosition(new Vector2D(
-				((getWidth()  + View.GRID_SPACING) * getX()) + View.GRID_SPACING,
-				((getHeight() + View.GRID_SPACING) * getY()) + View.GRID_SPACING));
+				((getWidth()  + GUIObserver.GRID_SPACING) * getX()) + GUIObserver.GRID_SPACING,
+				((getHeight() + GUIObserver.GRID_SPACING) * getY()) + GUIObserver.GRID_SPACING));
 	}
 
 	public void setState(State s) {

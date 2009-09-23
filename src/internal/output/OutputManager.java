@@ -37,9 +37,9 @@ public class OutputManager implements IOutput {
 	}
 
 	@Override
-	public void update(final Match.GameState curState, final Matchup matchup) {
+	public void update(final Match.GameState curState, final Matchup matchup, final Board board) {
 		for (IOutput o : observers) {
-			o.update(curState, matchup);
+			o.update(curState, matchup, board);
 		}
 	}
 

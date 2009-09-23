@@ -38,8 +38,9 @@ public interface IOutput {
 	 * 
 	 * @param curState The current game state of the match loop. (Either INIT or GAME_OVER)
 	 * @param matchup Access to the current matchup if desired.
+	 * @param board Access to the board
 	 */
-	void update(final Match.GameState curState, final Matchup matchup);
+	void update(final Match.GameState curState, final Matchup matchup, final Board board);
 	
 	/**
 	 * Reports just after a player makes a move to the game board.

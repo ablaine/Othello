@@ -10,8 +10,6 @@ import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.physics.vpe.VanillaAARectangle;
 
 import internal.util.StateManager;
-import internal.view.BoardDisplay;
-import internal.view.View;
 import internal.util.InputHandler;
 import internal.output.*;
 import internal.timer.*;
@@ -32,19 +30,15 @@ public class Othello extends StaticScreenGame {
 
 	private final AbstractBodyLayer<VanillaAARectangle> tileLayer;
 
-	private final View view;//TODO Refactor this into a GUIOutput class
 	private final Tournament tournament;
 
 	public Othello(Settings settings) {
-		super(View.WORLD_WIDTH, View.WORLD_HEIGHT, false);
+		super(GUIObserver.WORLD_WIDTH, GUIObserver.WORLD_HEIGHT, false);
 		ResourceFactory.getFactory().loadResources(RSC_PATH, "resources.xml");
 		gameframe.setTitle("Othello");
 
 		tileLayer = new AbstractBodyLayer.IterativeUpdate<VanillaAARectangle>();
 		gameObjectLayers.add(tileLayer);
-
-		BoardDisplay boardDisplay = new BoardDisplay(tileLayer);
-		view = new View(boardDisplay);
 
 		ITimer timer = null;
 		if (settings.getTimeLimit(Unit.NANOSECOND) == 0) {
@@ -57,12 +51,12 @@ public class Othello extends StaticScreenGame {
 
 		OutputManager output = new OutputManager();
 		output.registerObserver(new ConsoleObserver(printBoard));
+		output.registerObserver(new GUIObserver(tileLayer));
 
-		//TODO implement these
-//		output.registerObserver(new GUIObserver());
+		//TODO implement this
 //		output.registerObserver(new LoggerOutput("out.log"));
 
-		MatchFactory matchFactory = new MatchFactory(output, timer, boardDisplay);
+		MatchFactory matchFactory = new MatchFactory(output, timer);
 
 		//Wrap the timer in a "GameClock" before we give its access to the players
 		GameClock gameClock = new GameClock(timer);
