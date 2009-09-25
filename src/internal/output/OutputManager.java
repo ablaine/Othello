@@ -23,6 +23,13 @@ public class OutputManager implements IOutput {
 	private List<IOutput> observers = new LinkedList<IOutput>();
 
 	@Override
+	public void init() {
+		for (IOutput o : observers) {
+			o.init();
+		}
+	}
+
+	@Override
 	public void settings(final Settings settings) {
 		for (IOutput o : observers) {
 			o.settings(settings);
@@ -61,6 +68,13 @@ public class OutputManager implements IOutput {
 	public void playerGetsToMoveAgain(final Player player) {
 		for (IOutput o : observers) {
 			o.playerGetsToMoveAgain(player);
+		}
+	}
+
+	@Override
+	public void cleanup() {
+		for (IOutput o : observers) {
+			o.cleanup();
 		}
 	}
 

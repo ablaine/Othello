@@ -5,3 +5,6 @@ build.xml
 manifest.mf
 .DS_Store
 *.swp
+
+notes.txt
+out.xml

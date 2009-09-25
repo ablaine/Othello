@@ -33,7 +33,7 @@ public class Othello extends StaticScreenGame {
 	private final Tournament tournament;
 
 	public Othello(Settings settings) {
-		super(GUIObserver.WORLD_WIDTH, GUIObserver.WORLD_HEIGHT, false);
+		super(GUIOutput.WORLD_WIDTH, GUIOutput.WORLD_HEIGHT, false);
 		ResourceFactory.getFactory().loadResources(RSC_PATH, "resources.xml");
 		gameframe.setTitle("Othello");
 
@@ -50,12 +50,13 @@ public class Othello extends StaticScreenGame {
 		boolean printBoard = false;
 
 		OutputManager output = new OutputManager();
-		output.registerObserver(new ConsoleObserver(printBoard));
-		output.registerObserver(new GUIObserver(tileLayer));
+		output.registerObserver(new ConsoleOutput(printBoard));
+		output.registerObserver(new GUIOutput(tileLayer));
 
-		//TODO implement this
-//		output.registerObserver(new LoggerOutput("out.log"));
-
+		if (settings.hasLogFile()) {
+			output.registerObserver(new LoggerOutput(settings.getLogFileName()));
+		}
+		
 		MatchFactory matchFactory = new MatchFactory(output, timer);
 
 		//Wrap the timer in a "GameClock" before we give its access to the players
@@ -70,6 +71,8 @@ public class Othello extends StaticScreenGame {
 
 		tournament = new Tournament(output, matchFactory, matchupManager);
 
+		output.init();
+		
 		// Display settings
 		output.settings(settings);
 	}
@@ -108,6 +111,7 @@ public class Othello extends StaticScreenGame {
 		settings.setTournamentMode(handler.isTournamentMode());
 		settings.setGamesPerMatchup(handler.getGamesPerMatchup());
 		settings.setTimeLimitInNanoseconds(handler.getTimeLimitPerTurn());
+		settings.setLogFile("out.xml");
 
 		Othello othello = new Othello(settings);
 		othello.run();

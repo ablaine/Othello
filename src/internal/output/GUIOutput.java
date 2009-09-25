@@ -17,7 +17,7 @@ import jig.engine.physics.vpe.VanillaAARectangle;
  * 
  * @author Andrew Blaine
  */
-public class GUIObserver implements IOutput {
+public class GUIOutput implements IOutput {
 	public static final int GRID_SPACING = 2;
 	public static final int TILE_SIZE = 80;
 	public static final int BOARD_WIDTH  = (TILE_SIZE * Board.SIZE) + (GRID_SPACING * (Board.SIZE + 1));
@@ -29,8 +29,13 @@ public class GUIObserver implements IOutput {
 	private final AbstractBodyLayer<VanillaAARectangle> tileLayer;
 	private Tile[][] grid;
 
-	public GUIObserver(final AbstractBodyLayer<VanillaAARectangle> tileLayer) {
+	public GUIOutput(final AbstractBodyLayer<VanillaAARectangle> tileLayer) {
 		this.tileLayer = tileLayer;
+	}
+
+	@Override
+	public void init() {
+		//Do nothing
 	}
 
 	@Override
@@ -75,6 +80,11 @@ public class GUIObserver implements IOutput {
 
 	@Override
 	public void playerGetsToMoveAgain(final Player player) {
+		//Do nothing
+	}
+
+	@Override
+	public void cleanup() {
 		//Do nothing
 	}
 

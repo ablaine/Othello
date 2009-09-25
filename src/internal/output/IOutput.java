@@ -17,6 +17,13 @@ import internal.Tournament;
 public interface IOutput {
 
 	/**
+	 * Should be the first hook called. This method is intended to allow
+	 * implementations to run their initilization routines and general
+	 * preparation work.
+	 */
+	void init();
+
+	/**
 	 * Reports prior to starting up the tournament.
 	 * 
 	 * @param settings The settings for this series of matches.
@@ -55,4 +62,11 @@ public interface IOutput {
 	//NOTE: Consider passing in a timer?
 	void playerRanOutOfTime(final Player player);
 	void playerGetsToMoveAgain(final Player player);
+
+	/**
+	 * Guaranteed to be called once per tournament. This hook is intended to
+	 * allow implementations to cleanup/save their state prior to the game
+	 * ending.
+	 */
+	void cleanup();
 }

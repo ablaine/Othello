@@ -64,10 +64,6 @@ public class Settings {
 		this.logFile = logFile;
 	}
 
-	public List<String> getPlayerClassNames() {
-		return playerClassNames;
-	}
-
 /* GETTERS
  ******************************************************************************/
 	public boolean isTournamentMode() {
@@ -96,5 +92,9 @@ public class Settings {
 
 	public String getLogFileName() {
 		return logFile;
+	}
+
+	public List<String> getPlayerClassNames() {
+		return playerClassNames;
 	}
 }

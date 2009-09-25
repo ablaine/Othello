@@ -1,5 +1,8 @@
 package internal;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,6 +49,16 @@ public class MatchupManager {
 
 	public List<Player> getAllPlayers() {
 		return players;
+	}
+
+	public List<Player> getAllPlayersSortedByScore() {
+		List<Player> result = new ArrayList<Player>(players);
+		Collections.sort(result, new Comparator<Player>() {
+			@Override public int compare(Player p1, Player p2) {
+				return p2.getScore() - p1.getScore();
+			}
+		});
+		return result;
 	}
 
 	@Override

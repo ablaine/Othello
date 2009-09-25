@@ -60,6 +60,7 @@ public class Tournament implements IGameOverObserver {
 			case TOURNAMENT_OVER:
 				if (stateManager.isStateChange()) {
 					output.update(stateManager.getCurState(), matchupManager);
+					output.cleanup();
 					System.exit(0);
 				}
 				break;

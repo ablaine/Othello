@@ -33,8 +33,8 @@ public class Tile extends VanillaAARectangle {
 		this.y = y;
 		setState(s);
 		setPosition(new Vector2D(
-				((getWidth()  + GUIObserver.GRID_SPACING) * getX()) + GUIObserver.GRID_SPACING,
-				((getHeight() + GUIObserver.GRID_SPACING) * getY()) + GUIObserver.GRID_SPACING));
+				((getWidth()  + GUIOutput.GRID_SPACING) * getX()) + GUIOutput.GRID_SPACING,
+				((getHeight() + GUIOutput.GRID_SPACING) * getY()) + GUIOutput.GRID_SPACING));
 	}
 
 	public void setState(State s) {

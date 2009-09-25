@@ -20,14 +20,19 @@ import java.util.List;
  *
  * @author Andrew Blaine
  */
-public class ConsoleObserver implements IOutput {
+public class ConsoleOutput implements IOutput {
 	private static String OPEN = "<< ";
 	private static String CLOSE = " >>";
 
 	private final boolean printBoard;
 
-	public ConsoleObserver(boolean printBoard) {
+	public ConsoleOutput(boolean printBoard) {
 		this.printBoard = printBoard;
+	}
+
+	@Override
+	public void init() {
+		//Do nothing
 	}
 
 	@Override
@@ -47,14 +52,8 @@ public class ConsoleObserver implements IOutput {
 				break;
 			case TOURNAMENT_OVER:
 				sayln("Tournament is over!");
-				List<Player> players = new ArrayList<Player>(matchupManager.getAllPlayers());
-				Collections.sort(players, new Comparator<Player>() {
-					@Override public int compare(Player p1, Player p2) {
-						return p2.getScore() - p1.getScore();
-					}
-				});
 				sayln("Results of the tournament as -> (score) wins-ties-losses :: class.name#nickname");
-				for (Player p : players) {
+				for (Player p : matchupManager.getAllPlayersSortedByScore()) {
 					System.out.println("\t(" + p.getScore() + ") " +
 							p.getWins() + "-" + p.getTies() + "-" + p.getLosses() +
 							" :: " + p.getFullName());
@@ -99,6 +98,11 @@ public class ConsoleObserver implements IOutput {
 	@Override
 	public void playerGetsToMoveAgain(final Player player) {
 		sayln(player.getNicknameAndState() + " gets to move again!");
+	}
+
+	@Override
+	public void cleanup() {
+		//Do nothing
 	}
 
 	private void sayln(final String msg) {
